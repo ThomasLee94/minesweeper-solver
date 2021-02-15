@@ -1,1 +1,1 @@
-# sudoku-solver
+# minesweeper-solver
