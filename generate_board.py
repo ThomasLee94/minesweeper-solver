@@ -1,88 +1,64 @@
+# utilise the yeetcode problems for the reveal
+
 import random
 import numpy as np
 
-#NOTE: Still get index out of bounds error
-
-class GenerateBoard:
-    def __init__(self, width, length):
-        self.board = [[0 for x in range(width)] for y in range(length)] 
+class Board:
+    def __init__(self, width, height):
+        self.board = [[0] * width for _ in range(height)]
         self.width = width
-        self.height = length
+        self.height = height
         self.ignore_coords = set()
     
-    def _is_inbounds(self, y, x):
-        return 0 <=  y < self.height and 0 <= y< self.width
-    
-    def _is_mine(self, y, x):
-        return self.board[y][x] == "M"
-    
-    def add_mines(self, num_mines, user_coordinate):
+    def add_mines(self, num_mines):
         """
-        Randomly add the number of mines to the board and returns board
-        except of the user_coordinate and its adjacents.
+        Randomly add the number of mines to the board and returns board.
         """
-
-        self.add_ignore_coords(user_coordinate)
-
+        
         while num_mines != 0:
-            x = random.randint(0, self.width-1)
-            y = random.randint(0, self.height-1)
-            # don't place a mine on the same spot twice
-            if self._is_mine(y,x):
+            i = random.randint(0, self.height - 1)
+            j = random.randint(0, self.width - 1)
+            # dont place a mine in the same spot twice
+            if self._is_mine(i, j):
                 continue
-            if (y,x) not in self.ignore_coords:
-                self.board[y][x] = "M"
-                self.increment_adjacents(y, x)
+            if (i, j) not in self.ignore_coords:
+                self.board[i][j] = "M"
+                self.increment_adjacents(i, j)
                 num_mines -= 1
             else:
                 continue
-        
-        return self.board
 
-    def increment_adjacents(self, y, x):
+    def _is_inbounds(self, i, j):
+        return 0 <= i < self.height and 0 <= j < self.width
+    
+    def _is_mine(self, i, j):
+        return self.board[i][j] == "M"
+
+    def increment_adjacents(self, i, j):
         """
         increments all adjacents of mines by 1
         """
 
-        directions = [
-        (y - 1, x), # up
-        (y + 1, x), # down
-        (y, x - 1), # left
-        (y, x + 1), # right
-        (y- 1, x - 1), # top_left
-        (y - 1, x + 1), # top_right
-        (y + 1, x - 1), # bottom_left
-        (y + 1, x + 1), # bottom_right
-        ]
-
-        for y, x in directions:
-            if self._is_inbounds(y, x) and not self._is_mine(y, x):
-                self.board[y][x] += 1
+        for i, j in self.get_neighbours:
+            if self._is_inbounds(i, j) and not self._is_mine(i, j):
+                self.board[i][j] += 1
     
-    def add_ignore_coords(self, user_coordinate):
+    def get_neighbours(self, i, j):
 
-        y, x = user_coordinate
-
-        directions = [
-        (y - 1, x), # up
-        (y + 1, x), # down
-        (y, x - 1), # left
-        (y, x + 1), # right
-        (y- 1, x - 1), # top_left
-        (y - 1, x + 1), # top_right
-        (y + 1, x - 1), # bottom_left
-        (y + 1, x + 1), # bottom_right
+           directions = [
+            (i - 1, j), # up
+            (i + 1, j), # down
+            (i, j - 1), # left
+            (i, j + 1), # right
+            (i - 1, j - 1), # top_left
+            (i - 1, j + 1), # top_right
+            (i + 1, j - 1), # bottom_left
+            (i + 1, j + 1), # bottom_right
         ]
 
-        for y, x in directions:
-            if self._is_inbounds(y, x):
-                self.ignore_coords.add((y, x))
+        return directions
 
-
-
-board = GenerateBoard(10, 10)
-board.add_mines(5, (1,1))
-
-print(np.matrix(board.board))
-print(board.ignore_coords)
-
+if __name__ == '__main__':
+    board = Board(5, 5)
+    board.add_mines(5)
+    print(np.matrix(board.board))
