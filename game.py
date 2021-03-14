@@ -11,7 +11,7 @@ class MineSweeper:
         self.selected = 0
         self.mine_selected = False
         
-    def generate_board(self, user_coordinate):
+    def generate_board(self, i, j):
         """
         Generate board based on user input,
         create bombs around the coordinate
@@ -19,7 +19,7 @@ class MineSweeper:
         """
 
         board = Board(self.width, self.height)
-        board.add_mines(self.num_mines, user_coordinate)
+        board.add_mines(self.num_mines, i, j)
 
         self.hidden_board = board 
         self.visible_board = [[0] * self.width for _ in range(self.height)]
@@ -40,8 +40,8 @@ class MineSweeper:
             self.mine_selected = True
 
         # select all neighbours of blank tiles
-        if self.hidden_board[i][j] == 0:
-            for ni, nj in self.hidden_board.get_neighbours(i,j):
+        if self.hidden_board.board[i][j] == 0:
+            for ni, nj in self.hidden_board.get_neighbours(i, j):
                 self.select(ni, nj)
         
     def is_flagged(self, i, j):
@@ -59,7 +59,7 @@ class MineSweeper:
             self.visible_board[i][j] = 2
 
     def tile_is_visible(self, i, j):
-        return self.hidden_board.board[i][j] != 0
+        return self.visible_board[i][j] != 0
     
     def display_number_tile(self, i, j):
         return self.hidden_board.board[i][j]
@@ -93,13 +93,13 @@ class MineSweeper:
         while not (self.game_won() or self.game_lost()):
             # ask user if they want to place flag or select tile
             f_or_s = None
-            while f_or_s != 's' and f_or_s != 'f':
+            while f_or_s != 'f' and f_or_s != 's':
                 f_or_s = input('Do you want to (f) Flag or (s) Select? ')
 
             # ask user for coord to select s or f
             # repeat asking until they give valid input
             i = -1
-            while i > self.height and i < 0:
+            while i > self.height or i < 0:
                 i = input('i? ')
                 if i.isdigit():
                     i = int(i)
@@ -107,12 +107,22 @@ class MineSweeper:
                     i = -1
 
             j = -1
-            while j > self.width and j < 0:
+            while j > self.width or j < 0:
                 j = input('j? ')
                 if j.isdigit():
                     j = int(j)
                 else:
                     j = -1
+            
+
+            if self.hidden_board is None:
+                self.generate_board(0, 0)
+                if self.hidden_board._is_inbounds(i, j):
+                    self.generate_board(i, j)
+                    self.select(i, j)
+                else:
+                    self.hidden_board = None
+                    self.visible_board = None
 
             # select or flag given coords. if the given coords selected, ask again
             if self.is_selected(i,j):
@@ -120,12 +130,21 @@ class MineSweeper:
             # if the given coords are flagged and the user selected to select, ask again
             elif self.is_flagged(i, j) and f_or_s == 's':
                 print('try again')
+            elif not self.hidden_board._is_inbounds(i, j):
+                print('try again')
             # if the user asked to select, select the coords given. 
             elif f_or_s == 's':
                 self.select(i, j)
             # if user asked to flag, flag or deflag the given coords. 
             elif f_or_s == 'f':
                 self.flag(i, j)
+            
+            self.display_board()
+        
+        if self.game_lost():
+            print("You lost")
+        else:
+            print("You won")
     
     ########################### VISUALISE BOARD ###########################
     def display_number_tile(self, i, j):
@@ -176,10 +195,29 @@ class MineSweeper:
             print(row)
 
 
-if __name__ == '__main__':
-    minesweeper = MineSweeper(10, 10, 5)
-    minesweeper.generate_board((1,1))
+def debug(minesweeper):
+    for r in minesweeper.hidden_board.board:
+        print(r)
+
+    print()
+
+    for r in minesweeper.visible_board:
+        print(r)
+
+    print()
+
     minesweeper.display_board()
+
+
+
+if __name__ == '__main__':
+    minesweeper = MineSweeper(4, 4, 5)
+    # minesweeper.generate_board(1,1)
+    
+    # debug(minesweeper)
+
+    m = minesweeper
+    m.play_game()
 
 
         
