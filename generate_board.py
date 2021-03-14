@@ -39,13 +39,13 @@ class Board:
         increments all adjacents of mines by 1
         """
 
-        for i, j in self.get_neighbours:
-            if self._is_inbounds(i, j) and not self._is_mine(i, j):
-                self.board[i][j] += 1
+        for ni, nj in self.get_neighbours(i, j):
+            if self._is_inbounds(ni, nj) and not self._is_mine(ni, nj):
+                self.board[ni][nj] += 1
     
     def get_neighbours(self, i, j):
 
-           directions = [
+        directions = [
             (i - 1, j), # up
             (i + 1, j), # down
             (i, j - 1), # left
