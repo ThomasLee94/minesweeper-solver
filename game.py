@@ -64,18 +64,6 @@ class MineSweeper:
     def display_number_tile(self, i, j):
         return self.hidden_board.board[i][j]
     
-    def get_visible_neighbours(self):
-        pass
-    
-    def invis_tiles(self):
-        pass
-    
-    def get_invis_neighbours(self):
-        pass
-
-    def flagged_tiles(self):
-        pass
-    
     def is_mine(self, i, j):
         return self.hidden_board.board[i][j] == "M"
     
