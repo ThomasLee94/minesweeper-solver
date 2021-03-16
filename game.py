@@ -29,6 +29,8 @@ class MineSweeper:
         Selects tiles in the visible board if it is selectable, if the tile
         is blank recursively select all of its neighbours
         '''
+        if self.hidden_board is None:
+            self.generate_board(i, j)
 
         if self.is_selected(i, j) or self.is_flagged(i, j):
             return
@@ -57,9 +59,6 @@ class MineSweeper:
 
         elif not self.is_selected(i, j):
             self.visible_board[i][j] = 2
-
-    def tile_is_visible(self, i, j):
-        return self.visible_board[i][j] != 0
     
     def display_number_tile(self, i, j):
         return self.hidden_board.board[i][j]
@@ -150,7 +149,7 @@ class MineSweeper:
         return f'{color}{num}{ENDC}'
     
     def tile_representation(self, i, j):
-        if not self.tile_is_visible(i, j) and not self.is_flagged(i, j):
+        if not self.is_selected(i, j) and not self.is_flagged(i, j):
             # block representation of blocked tile
             return '\u2588'
 
@@ -171,16 +170,18 @@ class MineSweeper:
     def display_board(self):
         rows = []
         # place indicies/rows to see easily
-        rows.append('  ' + ''.join(map(str, range(self.width))))
+        # rows.append('  ' + ''.join(map(str, range(self.width))))
 
         for i in range(self.height):
-            row = f'{0} '
+            row = ''
+            # row += f'{0} '
             for j in range(self.width):
                 row += self.tile_representation(i, j)
             rows.append(row)
         
         for row in rows:
             print(row)
+        print()
 
 
 def debug(minesweeper):
@@ -197,8 +198,7 @@ def debug(minesweeper):
     minesweeper.display_board()
 
 
-
-if __name__ == '__main__':
+if __name__ == '__main__' is False:
     minesweeper = MineSweeper(4, 4, 5)
     # minesweeper.generate_board(1,1)
     
@@ -206,6 +206,9 @@ if __name__ == '__main__':
 
     m = minesweeper
     m.play_game()
+
+help(MineSweeper)
+
 
 
         

@@ -11,7 +11,7 @@ class Board:
     
     def add_mines(self, num_mines, i, j):
         """
-        Randomly add the number of mines to the board and returns board.
+        Randomly add the number of mines to the board.
         """
 
         ignore_coords = set(self.get_neighbours(i, j))
@@ -35,7 +35,7 @@ class Board:
 
     def increment_adjacents(self, i, j):
         """
-        increments all adjacents of mines by 1
+        increments all adjacents of mines by 1 that are not mines
         """
 
         for ni, nj in self.get_neighbours(i, j):
@@ -43,6 +43,10 @@ class Board:
                 self.board[ni][nj] += 1
     
     def get_neighbours(self, i, j):
+        """
+        Returns a list of all inbounds coorinates of the given
+        i & j. 
+        """
 
         directions = [
             (i - 1, j), # up
@@ -63,3 +67,5 @@ if __name__ == '__main__':
     board = Board(5, 5)
     board.add_mines(5, 1, 1)
     print(np.matrix(board.board))
+
+    

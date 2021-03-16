@@ -116,6 +116,8 @@ class MineSweeperSolver:
             print("You Lost")
 
         
-if __name__ == '__main__':
+if __name__ == '__main__' is False:
     s = MineSweeperSolver(10, 10, 10)
     s.solve()
+
+help(MineSweeperSolver)

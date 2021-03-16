@@ -1,43 +1,80 @@
+# Game Class
+
+
+
+```python
+def flag(self, i, j):
+    """
+    Flags/deflags at the given coordinate
+    """
+```
+```python
+def game_lost(self) -> bool:
 ```
 
- |  display_board(self)
- |  
- |  display_number_tile(self, i, j)
- |      ########################### VISUALISE BOARD ###########################
- |  
- |  flag(self, i, j)
- |  
- |  game_lost(self)
- |  
- |  game_won(self)
- |  
- |  generate_board(self, i, j)
- |      Generate board based on user input,
- |      create bombs around the coordinate
- |      that user chooses.
- |  
- |  is_blank(self, i, j)
- |  
- |  is_flagged(self, i, j)
- |  
- |  is_mine(self, i, j)
- |  
- |  is_selected(self, i, j)
- |  
- |  play_game(self)
- |  
- |  select(self, i, j)
- |      Selects tiles in the visible board if it is selectable, if the tile
- |      is blank recursively select all of its neighbours
- |  
- |  tile_representation(self, i, j)
- |  
- |  ----------------------------------------------------------------------
- |  Data descriptors defined here:
- |  
- |  __dict__
- |      dictionary for instance variables (if defined)
- |  
- |  __weakref__
- |      list of weak references to the object (if defined)
- ```
+```python
+def game_won(self) -> bool:
+```
+
+```python
+def generate_board(self, i, j) -> None:
+    """
+    Generate board based on user input,
+    create bombs around the coordinate
+    that user chooses.
+    """
+```
+
+```python
+def is_blank(self, i, j) -> bool:
+    """
+    Checks if [i][j] is a hidden tile on 
+    the hidden board (not seen by the solver) 
+    """
+```
+
+```python
+def is_flagged(self, i, j) -> bool:
+    """
+    Checks if [i][j] is flagged on the visible board (seen by solver) 
+    """
+```
+
+```python
+def is_mine(self, i, j) -> bool:
+    """
+    checks if the hidden_board[i][j] is a mine (not seen by solver)
+    """
+```
+
+```python
+def is_selected(self, i, j) -> bool:
+    """
+    checks if visible_board[i][j] is selected (seen by solver)
+    """
+```
+
+```python
+def play_game(self):
+    """
+    Starts the game and asks for user input for terminal game. 
+    Runs the rest of the game turn based logic.
+    """
+```
+
+```python
+def select(self, i, j)
+    Selects tiles in the visible board if it is selectable, if the tile
+    is blank recursively select all of its neighbours
+```
+
+## Board visualisation in terminal
+
+```python
+########################### VISUALISE BOARD ###########################
+def display_board(self):
+
+def display_number_tile(self, i, j):
+
+def tile_representation(self, i, j):
+```
