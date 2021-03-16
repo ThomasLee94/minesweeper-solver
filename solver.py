@@ -14,6 +14,10 @@ class MineSweeperSolver:
         self.game = MineSweeper(width, height, num_mines) 
     
     def get_visible_numbers(self):
+        """
+        Returns a list of all visible
+        numbers that are selected.
+        """
         visible_nums = []
 
         for i in range(self.game.height):
@@ -24,6 +28,10 @@ class MineSweeperSolver:
         return visible_nums
     
     def get_adjacent_flags(self, i, j):
+        """
+        Returns a list of all adjacents that are
+        flags from i & j.
+        """
         flags = []
 
         for ni, nj in self.game.hidden_board.get_neighbours(i, j):
@@ -33,6 +41,10 @@ class MineSweeperSolver:
         return flags
     
     def get_hidden_neighbours(self, i, j):
+        """
+        Returns a list of all neighbours that are hidden
+        from coord i & j.
+        """
         hidden_neighbours = []
 
         for ni, nj in self.game.hidden_board.get_neighbours(i, j):
@@ -63,20 +75,19 @@ class MineSweeperSolver:
 
     def identify_selections(self):
         """
-        Find all selections with 100% certainty
+        Find all selections with 100% certainty.
         """
 
         for i, j in self.get_visible_numbers():
             if self.is_satisfied(i,j):
                 neighbours = self.game.hidden_board.get_neighbours(i, j)
                 for ni, nj in neighbours:
-                    if (not self.game.is_selected(ni, nj) and 
-                     not self.game.is_flagged(ni, nj)):
+                    if (not self.game.is_selected(ni, nj) and not self.game.is_flagged(ni, nj)):
                         yield ni, nj
     
     def identify_flags(self):
         """
-        Finds all flags with 100% certainty
+        Finds all flags with 100% certainty.
         """
 
         for i, j in self.get_visible_numbers():
@@ -87,6 +98,9 @@ class MineSweeperSolver:
                         yield ni, nj
 
     def solve(self):
+        """
+        Runs the solver.
+        """
         self.make_random_selection()
         self.game.display_board()
 
@@ -116,7 +130,7 @@ class MineSweeperSolver:
             print("You Lost")
 
         
-if __name__ == '__main__' is False:
+if __name__ == '__main__':
     s = MineSweeperSolver(10, 10, 10)
     s.solve()
 
