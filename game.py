@@ -230,7 +230,7 @@ def debug(minesweeper):
     minesweeper.display_board()
 
 
-if __name__ == '__main__' is False:
+if __name__ == '__main__':
     minesweeper = MineSweeper(4, 4, 5)
     # minesweeper.generate_board(1,1)
     
@@ -239,7 +239,7 @@ if __name__ == '__main__' is False:
     m = minesweeper
     m.play_game()
 
-help(MineSweeper)
+
 
 
 
