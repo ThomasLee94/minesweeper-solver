@@ -1,4 +1,4 @@
-from generate_board import Board
+from minesweeper_solver.generate_board import Board
 
 class MineSweeper:
     def __init__(self, width, height, num_mines):

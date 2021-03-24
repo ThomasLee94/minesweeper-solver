@@ -6,7 +6,7 @@
 
 # search for all zeros that are connected to ititial 0 (bfs or dfs)
  
-from game import MineSweeper
+from .game import MineSweeper
 import random
 
 class MineSweeperSolver:
@@ -130,7 +130,3 @@ class MineSweeperSolver:
             print("You Lost")
 
         
-if __name__ == '__main__':
-    s = MineSweeperSolver(10, 10, 10)
-    s.solve()
-
