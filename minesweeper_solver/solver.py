@@ -92,10 +92,14 @@ class MineSweeperSolver:
 
         for i, j in self.get_visible_numbers():
             hidden_neighbours = self.get_hidden_neighbours(i,j)
-            if len(hidden_neighbours) == self.game.hidden_board.board[i][j]:
+            if self.hidden_neighbours_are_mines(i, j, hidden_neighbours):
+            # if len(hidden_neighbours) == self.game.hidden_board.board[i][j]:
                 for ni, nj in hidden_neighbours:
                     if not self.game.is_flagged(ni, nj):
                         yield ni, nj
+    
+    def hidden_neighbours_are_mines(self, i, j, hidden_neighbours):
+        return len(hidden_neighbours) == self.game.hidden_board.board[i][j]
 
     def solve(self):
         """
