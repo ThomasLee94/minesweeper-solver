@@ -1,7 +1,6 @@
 # utilise the yeetcode problems for the reveal
 
 import random
-import numpy as np
 
 class Board:
     def __init__(self, width, height):
@@ -66,6 +65,6 @@ class Board:
 if __name__ == '__main__':
     board = Board(5, 5)
     board.add_mines(5, 1, 1)
-    print(np.matrix(board.board))
+    
 
     
