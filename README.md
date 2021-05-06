@@ -16,3 +16,5 @@ A working example of the solver if you run `python solver.py`
 pip install minesweeper-solver
 minesweeper_solver
 ```
+# Weighted probability
+![read here](https://math.stackexchange.com/questions/2511421/correct-probability-calculation-for-minesweeper)
