@@ -17,4 +17,4 @@ pip install minesweeper-solver
 minesweeper_solver
 ```
 # Weighted probability
-![link](https://math.stackexchange.com/questions/2511421/correct-probability-calculation-for-minesweeper)
+[link!](https://math.stackexchange.com/questions/2511421/correct-probability-calculation-for-minesweeper)
