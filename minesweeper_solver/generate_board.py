@@ -8,21 +8,26 @@ class Board:
         self.width = width
         self.height = height
     
-    def add_mines(self, num_mines, i, j):
+    def add_mines(self, num_mines, tile):
         """
         Randomly add the number of mines to the board.
         """
 
-        ignore_coords = set(self.get_neighbours(i, j))
-        ignore_coords.add((i, j))
+        ignore_tiles = set()
+        neighbour_tiles = self.get_neighbours(tile)
+        ignore_tiles.add(id(tile))
+
+        for tile_neighbour in neighbour_tiles:
+            ignore_tiles.add(id(tile_neighbour))
 
         while num_mines != 0:
             ri = random.randint(0, self.height - 1)
             rj = random.randint(0, self.width - 1)
+            tile = self.board[ri][rj]
             # dont place a mine in the same spot twice
-            if self._is_mine(ri, rj) or (ri, rj) in ignore_coords:
+            if self._is_mine(tile) or id(tile) in ignore_tiles:
                 continue
-            self.board[ri][rj] = "M"
+            tile.make_mine()
             self.increment_adjacents(ri, rj)
             num_mines -= 1
 
