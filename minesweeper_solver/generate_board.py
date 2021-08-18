@@ -5,21 +5,26 @@ from tile import Tile
 
 class Board(Tile):
     def __init__(self, width, height):
-        self.board = [[Tile] * width for _ in range(height)]
+        self.board = []
         self.width = width
         self.height = height
+
+        for i in range(height):
+            row = []
+            for j in range(width):
+                row.append(Tile(i, j))
+            self.board.append(row)
     
-    def add_mines(self, num_mines, tile):
+    def add_mines(self, num_mines, i, j):
         """
         Randomly add the number of mines to the board.
         """
 
         ignore_tiles = set()
-        neighbour_tiles = self.get_neighbours(tile)
-        ignore_tiles.add(id(tile))
+        ignore_tiles.add(id(self.board[i][j])) # add id of tile obj
 
-        for tile_neighbour in neighbour_tiles:
-            ignore_tiles.add(id(tile_neighbour))
+        for neighbour_tile in self.get_neighbours(i, j):
+            ignore_tiles.add(id(neighbour_tile))
 
         while num_mines != 0:
             ri = random.randint(0, self.height - 1)
@@ -66,7 +71,7 @@ class Board(Tile):
 
         for ni, nj in directions:
             if self._is_inbounds(ni, nj):
-                yield ni, nj
+                yield self.board[ni][nj]
 
 if __name__ == '__main__':
     board = Board(5, 5)
