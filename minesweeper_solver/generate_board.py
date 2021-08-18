@@ -1,10 +1,11 @@
 # utilise the yeetcode problems for the reveal
 
 import random
+from tile import Tile
 
-class Board:
+class Board(Tile):
     def __init__(self, width, height):
-        self.board = [[0] * width for _ in range(height)]
+        self.board = [[Tile] * width for _ in range(height)]
         self.width = width
         self.height = height
     
@@ -34,8 +35,8 @@ class Board:
     def _is_inbounds(self, i, j):
         return 0 <= i < self.height and 0 <= j < self.width
     
-    def _is_mine(self, i, j):
-        return self.board[i][j] == "M"
+    def _is_mine(self, tile):
+        return tile._is_mine is True
 
     def increment_adjacents(self, i, j):
         """
