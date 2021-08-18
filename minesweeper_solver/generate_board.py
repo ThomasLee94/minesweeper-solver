@@ -1,45 +1,56 @@
 # utilise the yeetcode problems for the reveal
 
 import random
+from tile import Tile
 
-class Board:
+class Board(Tile):
     def __init__(self, width, height):
-        self.board = [[0] * width for _ in range(height)]
+        self.board = []
         self.width = width
         self.height = height
+
+        for i in range(height):
+            row = []
+            for j in range(width):
+                row.append(Tile(i, j))
+            self.board.append(row)
     
     def add_mines(self, num_mines, i, j):
         """
         Randomly add the number of mines to the board.
         """
 
-        ignore_coords = set(self.get_neighbours(i, j))
-        ignore_coords.add((i, j))
+        ignore_tiles = set()
+        ignore_tiles.add(id(self.board[i][j])) # add id of tile obj
+
+        for neighbour_tile in self.get_neighbours(i, j):
+            ignore_tiles.add(id(neighbour_tile))
 
         while num_mines != 0:
             ri = random.randint(0, self.height - 1)
             rj = random.randint(0, self.width - 1)
+            tile = self.board[ri][rj]
             # dont place a mine in the same spot twice
-            if self._is_mine(ri, rj) or (ri, rj) in ignore_coords:
+            if self._is_mine(tile) or id(tile) in ignore_tiles:
                 continue
-            self.board[ri][rj] = "M"
+            tile.make_mine()
             self.increment_adjacents(ri, rj)
             num_mines -= 1
 
     def _is_inbounds(self, i, j):
         return 0 <= i < self.height and 0 <= j < self.width
     
-    def _is_mine(self, i, j):
-        return self.board[i][j] == "M"
+    def _is_mine(self, tile):
+        return tile._is_mine is True
 
     def increment_adjacents(self, i, j):
         """
         increments all adjacents of mines by 1 that are not mines
         """
 
-        for ni, nj in self.get_neighbours(i, j):
-            if not self._is_mine(ni, nj):
-                self.board[ni][nj] += 1
+        for tile in self.get_neighbours(i, j):
+            if not tile.is_mine():
+                tile.val += 1
     
     def get_neighbours(self, i, j):
         """
@@ -60,7 +71,7 @@ class Board:
 
         for ni, nj in directions:
             if self._is_inbounds(ni, nj):
-                yield ni, nj
+                yield self.board[ni][nj]
 
 if __name__ == '__main__':
     board = Board(5, 5)
