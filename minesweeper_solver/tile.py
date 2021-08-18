@@ -5,6 +5,7 @@ class Tile:
         self.i = i
         self.j = j
 
+        self.is_blank = True
         self.num_adjacent_mines = num_adjacent_mines
         self._is_mine = is_mine
 
@@ -40,12 +41,12 @@ class Tile:
         return self.i, self.j
     
     def is_mine(self):
-        pass
+        return self.is_mine
 
     def is_blank(self):
-        pass
+        return self.is_blank
 
     def make_mine(self):
-        pass
+        self.is_mine = True
 
     
