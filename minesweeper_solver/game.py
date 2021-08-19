@@ -48,20 +48,20 @@ class MineSweeper:
 
         # select all neighbours of blank tiles
         if tile.is_blank():
-            for neighbour_tile in self.board.get_neighbours(i,j):
+            for ni, nj in self.board.get_neighbours(i,j):
                 self.select(ni, nj)
         
     def is_flagged(self, i, j):
         """
         Checks if [i][j] is flagged on the visible board (seen by solver) 
         """
-        return self.visible_board[i][j] == 2
+        return self.board[i][j].flagged is True
     
     def is_selected(self, i, j):
         """
         checks if visible_board[i][j] is selected (seen by solver)
         """
-        return self.visible_board[i][j] == 1
+        return self.visible_board[i][j].selected is True
 
     def flag(self, i, j):
         """
@@ -69,13 +69,13 @@ class MineSweeper:
         """
         # deflag
         if self.is_flagged(i, j):
-            self.visible_board[i][j] =  0
+            self.board[i][j].flagged = False
 
         elif not self.is_selected(i, j):
-            self.visible_board[i][j] = 2
+            self.board[i][j].selected = True
     
     def display_number_tile(self, i, j):
-        return self.hidden_board.board[i][j]
+        return self.board[i][j].val
     
     def is_mine(self, i, j):
         """

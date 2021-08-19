@@ -6,9 +6,10 @@ class Tile:
         self.j = j
 
         self._is_blank = True 
-        self.val = 0
         self._is_mine = is_mine
         self.num_adjacent_mines = num_adjacent_mines
+        self.flagged = False
+        self.selected = False
 
     def __repr__(self):
         return f'Tile(coords={self.i, self.j}, n={self.num_adjacent_mines}, b={self.is_mine()})'

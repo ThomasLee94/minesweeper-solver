@@ -48,7 +48,7 @@ class Board(Tile):
 
         for ni, nj in self.get_neighbours(i, j):
             if not self.board[ni][nj].is_mine():
-                self.board[ni][nj].val += 1
+                self.board[ni][nj].num_adjacent_mines += 1
     
     def get_neighbours(self, i, j):
         """

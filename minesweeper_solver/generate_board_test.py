@@ -17,7 +17,7 @@ def test_board_no_mines():
 
             assert board.board[i][j]._is_mine is False
             assert board.board[i][j]._is_blank is True
-            assert board.board[i][j].val == 0
+            assert board.board[i][j].num_adjacent_mines == 0
             assert board.board[i][j].num_adjacent_mines == 0
 
 def test_board_blanks():
@@ -26,18 +26,18 @@ def test_board_blanks():
     for i in range(len(board.board)):
         for j in range(len(board.board[i])):
             # if tile val is 0, assert that it is blank
-            if board.board[i][j].val == 0:
+            if board.board[i][j].num_adjacent_mines == 0:
                 if not board.board[i][j].is_blank():
                     raise AssertionError
 
             # if tile is blank, assert that val is 0
             if board.board[i][j].is_blank():
-                if board.board[i][j].val != 0:
+                if board.board[i][j].num_adjacent_mines != 0:
                     raise AssertionError
 
             # if tile is not blank, assert that val is great than 0
             else:
-                if board.board[i][j].val <= 0:
+                if board.board[i][j].num_adjacent_mines <= 0:
                     raise AssertionError
 
 def test_board_with_mines_counter():
@@ -70,21 +70,21 @@ def test_board_with_mines_adjacent_vals():
             if board.board[i][j]._is_mine:
                 tmp.append("M")
             else:
-                tmp.append(str(board.board[i][j].val))
+                tmp.append(str(board.board[i][j].num_adjacent_mines))
         test_board.append(tmp)
     
     pprint.pprint(test_board)
 
     for i in range(len(board.board)):
         for j in range(len(board.board[i])):
-            if board.board[i][j].val > 0:
+            if board.board[i][j].num_adjacent_mines > 0:
                 adjacent_mines = 0
 
                 for ni, nj in board.get_neighbours(i, j):
                     if board.board[ni][nj]._is_mine:
                         adjacent_mines += 1
                 
-                if board.board[i][j].val != adjacent_mines:
+                if board.board[i][j].num_adjacent_mines != adjacent_mines:
                     raise AssertionError
 
 # [['0', '0', '0', '1', '1'],
