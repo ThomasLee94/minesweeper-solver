@@ -6,7 +6,7 @@
 
 # search for all zeros that are connected to ititial 0 (bfs or dfs)
  
-from .game import MineSweeper
+from game import MineSweeper
 import random
 
 class MineSweeperSolver:
@@ -93,7 +93,6 @@ class MineSweeperSolver:
         for i, j in self.get_visible_numbers():
             hidden_neighbours = self.get_hidden_neighbours(i,j)
             if self.hidden_neighbours_are_mines(i, j, hidden_neighbours):
-            # if len(hidden_neighbours) == self.game.hidden_board.board[i][j]:
                 for ni, nj in hidden_neighbours:
                     if not self.game.is_flagged(ni, nj):
                         yield ni, nj
@@ -133,4 +132,6 @@ class MineSweeperSolver:
         else:
             print("You Lost")
 
-        
+if __name__ == "__main__":
+    game = MineSweeperSolver(10, 10, 10)
+    print(game.solve())

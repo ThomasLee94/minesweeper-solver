@@ -5,10 +5,10 @@ class Tile:
         self.i = i
         self.j = j
 
-        self._is_blank = True
-        self.num_adjacent_mines = num_adjacent_mines
-        self._is_mine = is_mine
+        self._is_blank = True 
         self.val = 0
+        self._is_mine = is_mine
+        self.num_adjacent_mines = num_adjacent_mines
 
     def __repr__(self):
         return f'Tile(coords={self.i, self.j}, n={self.num_adjacent_mines}, b={self.is_mine()})'
@@ -42,12 +42,12 @@ class Tile:
         return self.i, self.j
     
     def is_mine(self):
-        return self.is_mine
+        return self._is_mine
 
     def is_blank(self):
         return self._is_blank
 
     def make_mine(self):
-        self.is_mine = True
+        self._is_mine = True
 
     

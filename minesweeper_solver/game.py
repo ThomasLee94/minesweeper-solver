@@ -3,8 +3,8 @@ from minesweeper_solver.generate_board import Board
 class MineSweeper:
     def __init__(self, width, height, num_mines):
         self.hidden_board = None
-        # in visible board use 0,1,2 to show hidden, visible & flagged tiles
-        self.visible_board = None
+        self.visible_board = None # in visible board use 0,1,2 to show hidden, visible & flagged tiles
+        
         self.width = width
         self.height = height
         self.num_mines = num_mines

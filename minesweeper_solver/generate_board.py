@@ -1,5 +1,3 @@
-# utilise the yeetcode problems for the reveal
-
 import random
 from tile import Tile
 
@@ -12,7 +10,7 @@ class Board(Tile):
         for i in range(height):
             row = []
             for j in range(width):
-                row.append(Tile(i, j))
+                row.append(Tile((i,j)))
             self.board.append(row)
     
     def add_mines(self, num_mines, i, j):
@@ -72,10 +70,6 @@ class Board(Tile):
         for ni, nj in directions:
             if self._is_inbounds(ni, nj):
                 yield self.board[ni][nj]
-
-if __name__ == '__main__':
-    board = Board(5, 5)
-    board.add_mines(5, 1, 1)
     
 
     
