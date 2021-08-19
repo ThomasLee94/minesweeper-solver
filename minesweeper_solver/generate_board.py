@@ -46,9 +46,9 @@ class Board(Tile):
         increments all adjacents of mines by 1 that are not mines
         """
 
-        for tile in self.get_neighbours(i, j):
-            if not tile.is_mine():
-                tile.val += 1
+        for ni, nj in self.get_neighbours(i, j):
+            if not self.board[ni][nj].is_mine():
+                self.board[ni][nj].val += 1
     
     def get_neighbours(self, i, j):
         """
@@ -69,7 +69,7 @@ class Board(Tile):
 
         for ni, nj in directions:
             if self._is_inbounds(ni, nj):
-                yield self.board[ni][nj]
+                yield ni, nj
     
 
     

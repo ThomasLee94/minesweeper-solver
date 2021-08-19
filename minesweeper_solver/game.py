@@ -2,13 +2,14 @@ from minesweeper_solver.generate_board import Board
 
 class MineSweeper:
     def __init__(self, width, height, num_mines):
-        self.hidden_board = None
-        self.visible_board = None # in visible board use 0,1,2 to show hidden, visible & flagged tiles
+        # self.hidden_board = None
+        # self.visible_board = None # in visible board use 0,1,2 to show hidden, visible & flagged tiles
+        self.board = None
         
         self.width = width
         self.height = height
         self.num_mines = num_mines
-        self.selected = 0
+        self.selected = False
         self.mine_selected = False
         
     def generate_board(self, i, j):
@@ -21,29 +22,33 @@ class MineSweeper:
         board = Board(self.width, self.height)
         board.add_mines(self.num_mines, i, j)
 
-        self.hidden_board = board 
-        self.visible_board = [[0] * self.width for _ in range(self.height)]
+        # self.hidden_board = board 
+        # self.visible_board = [[0] * self.width for _ in range(self.height)]
+
+        self.board = board
     
     def select(self, i, j):
         '''
         Selects tiles in the visible board if it is selectable, if the tile
         is blank recursively select all of its neighbours
         '''
-        if self.hidden_board is None:
-            self.generate_board(i, j)
+        # if self.hidden_board is None:
+        #     self.generate_board(i, j)
 
-        if self.is_selected(i, j) or self.is_flagged(i, j):
+        tile = self.board[i][j]
+
+        if self.is_selected(tile) or self.is_flagged(tile):
             return
 
-        self.visible_board[i][j] = 1
-        self.selected += 1
+        # self.visible_board[i][j] = 1
+        tile.selected = True
 
-        if self.hidden_board._is_mine(i, j):
+        if tile.is_mine():
             self.mine_selected = True
 
         # select all neighbours of blank tiles
-        if self.hidden_board.board[i][j] == 0:
-            for ni, nj in self.hidden_board.get_neighbours(i, j):
+        if tile.is_blank():
+            for neighbour_tile in self.board.get_neighbours(i,j):
                 self.select(ni, nj)
         
     def is_flagged(self, i, j):

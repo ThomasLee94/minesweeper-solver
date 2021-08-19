@@ -34,7 +34,7 @@ def test_board_blanks():
             if board.board[i][j].is_blank():
                 if board.board[i][j].val != 0:
                     raise AssertionError
-                    
+
             # if tile is not blank, assert that val is great than 0
             else:
                 if board.board[i][j].val <= 0:
@@ -80,8 +80,8 @@ def test_board_with_mines_adjacent_vals():
             if board.board[i][j].val > 0:
                 adjacent_mines = 0
 
-                for tile in board.get_neighbours(i, j):
-                    if tile._is_mine:
+                for ni, nj in board.get_neighbours(i, j):
+                    if board.board[ni][nj]._is_mine:
                         adjacent_mines += 1
                 
                 if board.board[i][j].val != adjacent_mines:
