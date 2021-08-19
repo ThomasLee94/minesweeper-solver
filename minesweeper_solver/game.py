@@ -1,4 +1,4 @@
-from minesweeper_solver.generate_board import Board
+from board import Board
 
 class MineSweeper:
     def __init__(self, width, height, num_mines):
@@ -9,8 +9,14 @@ class MineSweeper:
         self.width = width
         self.height = height
         self.num_mines = num_mines
-        self.selected = False
+        self.total_selections = 0
         self.mine_selected = False
+    
+    # def __repr__(self):
+    #     return f"MineSweeper(board={self.board.board})"
+        
+    def __str__(self):
+        return f'{str(self.__class__)}'
         
     def generate_board(self, i, j):
         """
@@ -22,9 +28,6 @@ class MineSweeper:
         board = Board(self.width, self.height)
         board.add_mines(self.num_mines, i, j)
 
-        # self.hidden_board = board 
-        # self.visible_board = [[0] * self.width for _ in range(self.height)]
-
         self.board = board
     
     def select(self, i, j):
@@ -32,16 +35,15 @@ class MineSweeper:
         Selects tiles in the visible board if it is selectable, if the tile
         is blank recursively select all of its neighbours
         '''
-        # if self.hidden_board is None:
-        #     self.generate_board(i, j)
+        if self.board is None:
+            self.generate_board(i, j)
 
         tile = self.board[i][j]
 
         if self.is_selected(tile) or self.is_flagged(tile):
             return
 
-        # self.visible_board[i][j] = 1
-        tile.selected = True
+        tile.total_selections += 1
 
         if tile.is_mine():
             self.mine_selected = True
@@ -51,52 +53,51 @@ class MineSweeper:
             for ni, nj in self.board.get_neighbours(i,j):
                 self.select(ni, nj)
         
-    def is_flagged(self, i, j):
+    def is_flagged(self, tile):
         """
         Checks if [i][j] is flagged on the visible board (seen by solver) 
         """
-        return self.board[i][j].flagged is True
+        return tile.flagged is True
     
-    def is_selected(self, i, j):
+    def is_selected(self, tile):
         """
         checks if visible_board[i][j] is selected (seen by solver)
         """
-        return self.visible_board[i][j].selected is True
+        return tile.selected
 
-    def flag(self, i, j):
+    def flag(self, tile):
         """
         Flags/deflags at the given coordinate
         """
         # deflag
-        if self.is_flagged(i, j):
-            self.board[i][j].flagged = False
+        if self.is_flagged(tile):
+            tile.flagged = False
 
-        elif not self.is_selected(i, j):
-            self.board[i][j].selected = True
+        elif not self.is_selected(tile):
+            tile.selected = True
     
-    def display_number_tile(self, i, j):
-        return self.board[i][j].val
+    def display_number_tile(self, tile):
+        return tile.num_adjacent_mines
     
     def is_mine(self, i, j):
         """
         checks if the hidden_board[i][j] is a mine (not seen by solver)
         """
-        return self.hidden_board.board[i][j] == "M"
+        return self.board[i][j].is_mine()
     
     def is_blank(self, i, j):
         """
         Checks if [i][j] is a hidden tile on 
         the hidden board (not seen by the solver) 
         """
-        return self.hidden_board.board[i][j] == 0
+        return self.board[i][j].is_blank()
     
     def game_won(self):
-        return self.width * self.height - self.num_mines == self.selected
+        return self.width * self.height - self.num_mines == self.total_selections
     
     def game_lost(self):
         return self.mine_selected
 
-    
     def play_game(self):
         """
         Starts the game and asks for user input for terminal game. 
@@ -127,29 +128,31 @@ class MineSweeper:
                     j = -1
             
 
-            if self.hidden_board is None:
+            if self.board is None:
                 self.generate_board(0, 0)
-                if self.hidden_board._is_inbounds(i, j):
+                if self.board._is_inbounds(i, j):
                     self.generate_board(i, j)
                     self.select(i, j)
                 else:
                     self.hidden_board = None
                     self.visible_board = None
 
+            tile = self.board[i][j]
+
             # select or flag given coords. if the given coords selected, ask again
-            if self.is_selected(i,j):
+            if self.is_selected(tile):
                 print("try again")
             # if the given coords are flagged and the user selected to select, ask again
-            elif self.is_flagged(i, j) and f_or_s == 's':
+            elif self.is_flagged(tile) and f_or_s == 's':
                 print('try again')
-            elif not self.hidden_board._is_inbounds(i, j):
+            elif not self.board._is_inbounds(i, j):
                 print('try again')
             # if the user asked to select, select the coords given. 
             elif f_or_s == 's':
-                self.select(i, j)
+                self.select(tile)
             # if user asked to flag, flag or deflag the given coords. 
             elif f_or_s == 'f':
-                self.flag(i, j)
+                self.flag(tile)
             
             self.display_board()
         
@@ -159,11 +162,11 @@ class MineSweeper:
             print("You won")
     
     ########################### VISUALISE BOARD ###########################
-    def display_number_tile(self, i, j):
+    def display_number_tile(self, tile):
         """
         Display terminal board function
         """
-        num = self.hidden_board.board[i][j] 
+        num = tile.num_adjacent_mines
         ENDC = '\033[0m'
 
         colors = [None,
@@ -180,23 +183,26 @@ class MineSweeper:
         """
         Display terminal board function
         """
-        if not self.is_selected(i, j) and not self.is_flagged(i, j):
+
+        tile = self.board[i][j]
+
+        if not self.is_selected(tile) and not self.is_flagged(tile):
             # block representation of blocked tile
             return '\u2588'
 
-        elif self.is_flagged(i, j):
+        elif self.is_flagged(tile):
             # red block to show flag
             return '\033[91m\u2588\033[0m'
 
-        elif self.is_blank(i, j):
+        elif self.is_blank(tile):
             # blank visible tile
             return ' '
 
-        elif self.is_mine(i, j):
+        elif self.is_mine(tile):
             return '\033[91m*\033[0m'
         else:
             # the number on the visible tile
-            return self.display_number_tile(i, j)
+            return self.display_number_tile(tile)
     
     def display_board(self):
         """
@@ -222,12 +228,12 @@ def debug(minesweeper):
     """
     Useful debug function
     """
-    for r in minesweeper.hidden_board.board:
+    for r in minesweeper.board:
         print(r)
 
     print()
 
-    for r in minesweeper.visible_board:
+    for r in minesweeper.board:
         print(r)
 
     print()
@@ -242,7 +248,9 @@ if __name__ == '__main__':
     # debug(minesweeper)
 
     m = minesweeper
-    m.play_game()
+    # m.play_game()
+
+    print(m)
 
 
 

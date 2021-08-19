@@ -1,5 +1,5 @@
 from tile import Tile
-from generate_board import Board
+from board import Board
 import pytest
 import pprint
 
@@ -11,14 +11,13 @@ def test_board_no_mines():
 
     for i in range(len(board.board)):
         for j in range(len(board.board[i])):
-            assert isinstance(board.board[i][j], Tile)
-            assert board.board[i][j].i == i
-            assert board.board[i][j].j == j
+            if not isinstance(board.board[i][j], Tile): raise TypeError
+            if board.board[i][j].i != i: raise AssertionError
+            if board.board[i][j].j != j: raise AssertionError
 
-            assert board.board[i][j]._is_mine is False
-            assert board.board[i][j]._is_blank is True
-            assert board.board[i][j].num_adjacent_mines == 0
-            assert board.board[i][j].num_adjacent_mines == 0
+            if board.board[i][j].is_mine() is not False: raise AssertionError
+            if board.board[i][j].is_blank() is not True: raise AssertionError
+            if board.board[i][j].num_adjacent_mines != 0: raise AssertionError
 
 def test_board_blanks():
     board = Board(5, 5)
@@ -53,9 +52,6 @@ def test_board_with_mines_counter():
         for j in range(len(board.board[i])):
             if board.board[i][j]._is_mine:
                 mine_counter += 1
-
-            assert board.board[i][j].i == i
-            assert board.board[i][j].j == j
 
     assert mine_counter == 5
 

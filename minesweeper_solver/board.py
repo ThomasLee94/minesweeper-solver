@@ -13,6 +13,12 @@ class Board(Tile):
                 row.append(Tile((i,j)))
             self.board.append(row)
     
+    # def __repr__(self):
+    #     return f'Board(board={self.board}, width={self.width}, height={self.height})'
+    
+    def __str__(self):
+        return f'{str(self.__class__)}'
+
     def add_mines(self, num_mines, i, j):
         """
         Randomly add the number of mines to the board.

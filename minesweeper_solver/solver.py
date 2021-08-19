@@ -22,7 +22,7 @@ class MineSweeperSolver:
 
         for i in range(self.game.height):
             for j in range(self.game.width):
-                if self.game.is_selected(i, j):
+                if self.game.is_selected(self.game.board.board[i][j]):
                     visible_nums.append((i, j))
         
         return visible_nums
@@ -34,8 +34,8 @@ class MineSweeperSolver:
         """
         flags = []
 
-        for ni, nj in self.game.hidden_board.get_neighbours(i, j):
-            if self.game.is_flagged(ni, nj):
+        for ni, nj in self.game.board.get_neighbours(i, j):
+            if self.game.is_flagged(self.game.board.board[ni][nj]):
                 flags.append((ni, nj))
         
         return flags
@@ -47,8 +47,8 @@ class MineSweeperSolver:
         """
         hidden_neighbours = []
 
-        for ni, nj in self.game.hidden_board.get_neighbours(i, j):
-            if not self.game.is_selected(ni, nj):
+        for ni, nj in self.game.board.get_neighbours(i, j):
+            if not self.game.is_selected(self.game.board.board[ni][nj]):
                 hidden_neighbours.append((ni, nj))
         
         return hidden_neighbours
@@ -58,7 +58,7 @@ class MineSweeperSolver:
         If the number of flags next to a numbered tile is equal to the tiles number
         """
         flags = self.get_adjacent_flags(i, j)
-        return len(flags) == self.game.hidden_board.board[i][j]
+        return len(flags) == self.game.board.board[i][j].num_adjacent_mines
     
     def make_random_selection(self):
         """
@@ -68,8 +68,10 @@ class MineSweeperSolver:
         i = random.randint(0, self.game.height - 1)
         j = random.randint(0, self.game.width - 1)
 
-        if self.game.hidden_board is None or not self.game.is_selected(i, j):
-            self.game.select(i, j)
+        tile = self.game.board.board[i][j]
+
+        if not self.game.is_selected(tile):
+            self.game.select(i,j)
         else:
             self.make_random_selection()
 
@@ -80,9 +82,9 @@ class MineSweeperSolver:
 
         for i, j in self.get_visible_numbers():
             if self.is_satisfied(i,j):
-                neighbours = self.game.hidden_board.get_neighbours(i, j)
+                neighbours = self.game.board.get_neighbours(i, j)
                 for ni, nj in neighbours:
-                    if (not self.game.is_selected(ni, nj) and not self.game.is_flagged(ni, nj)):
+                    if (not self.game.is_selected(self.game.board.board[ni][nj]) and not self.game.is_flagged(self.game.board.board[ni][nj])):
                         yield ni, nj
     
     def identify_flags(self):
@@ -134,4 +136,5 @@ class MineSweeperSolver:
 
 if __name__ == "__main__":
     game = MineSweeperSolver(10, 10, 10)
+    print(game.game)
     print(game.solve())
