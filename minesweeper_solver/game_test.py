@@ -17,3 +17,13 @@ def test_generate_board():
 
     if not isinstance(game.board, Board): raise TypeError
 
+def test_generate_board_select():
+    game = MineSweeper(4, 4, 5)
+    game.generate_board(1,1)
+
+    print(game.board.board[1][1].__str__)
+
+    assert game.board.board[1][1].is_mine() is False
+    assert game.board.board[1][1].is_hidden() is False
+
+

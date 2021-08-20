@@ -13,7 +13,7 @@ class Tile:
         self.selected = False
 
     def __repr__(self):
-        return f'Tile(coords={self.i, self.j}, num_adj_mines={self.num_adjacent_mines}, is_mine={self.is_mine()})'
+        return f'Tile(coords={self.i, self.j}, num_adj_mines={self.num_adjacent_mines}, is_mine={self.is_mine()}, hidden={self._is_hidden}, flagged={self.flagged}, selected={self.selected})'
     
     def __str__(self):
         if self.is_mine():
@@ -54,5 +54,11 @@ class Tile:
     
     def is_hidden(self):
         return self._is_hidden
+    
+    def is_selected(self):
+        return self.selected
+    
+    def unhide(self):
+        self._is_hidden = False
 
     

@@ -27,7 +27,7 @@ class MineSweeper:
 
         board = Board(self.width, self.height)
         board.add_mines(self.num_mines, i, j)
-
+        self.select(i,j)
         self.board = board
     
     def select(self, i, j):
@@ -44,7 +44,7 @@ class MineSweeper:
             return
 
         self.total_selections += 1
-        tile._is_hidden = False
+        tile.unhide() 
         tile.selected = True
 
         if tile.is_mine():
@@ -53,6 +53,7 @@ class MineSweeper:
         # select all neighbours of blank tiles
         if tile.is_blank():
             for ni, nj in self.board.get_neighbours(i,j):
+                print(ni,nj)
                 self.select(ni, nj)
         
     def is_flagged(self, tile):
@@ -67,10 +68,12 @@ class MineSweeper:
         """
         return tile.selected
 
-    def flag(self, tile):
+    def flag(self, i, j):
         """
         Flags/deflags at the given coordinate
         """
+
+        tile = self.board.board[i][j]
         # deflag
         if self.is_flagged(tile):
             tile.flagged = False
@@ -135,11 +138,8 @@ class MineSweeper:
                 if self.board._is_inbounds(i, j):
                     self.generate_board(i, j)
                     self.select(i, j)
-                # else:
-                #     self.hidden_board = None
-                #     self.visible_board = None
 
-            tile = self.board[i][j]
+            tile = self.board.board[i][j]
 
             # select or flag given coords. if the given coords selected, ask again
             if self.is_selected(tile):
@@ -151,10 +151,10 @@ class MineSweeper:
                 print('try again')
             # if the user asked to select, select the coords given. 
             elif f_or_s == 's':
-                self.select(tile)
+                self.select(i,j)
             # if user asked to flag, flag or deflag the given coords. 
             elif f_or_s == 'f':
-                self.flag(tile)
+                self.flag(i,j)
             
             self.display_board()
         
@@ -230,12 +230,12 @@ def debug(minesweeper):
     """
     Useful debug function
     """
-    for r in minesweeper.board:
+    for r in minesweeper.board.board:
         print(r)
 
     print()
 
-    for r in minesweeper.board:
+    for r in minesweeper.board.board:
         print(r)
 
     print()
@@ -247,7 +247,7 @@ if __name__ == '__main__':
     minesweeper = MineSweeper(4, 4, 5)
     minesweeper.generate_board(1,1)
     
-    # debug(minesweeper)
+    debug(minesweeper)
 
     m = minesweeper
     m.play_game()
