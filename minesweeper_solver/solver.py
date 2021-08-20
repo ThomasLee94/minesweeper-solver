@@ -68,13 +68,21 @@ class MineSweeperSolver:
         i = random.randint(0, self.game.height - 1)
         j = random.randint(0, self.game.width - 1)
 
-        if self.game.board is not None:
-            tile = self.game.board.board[i][j]
-
-        if not self.game.is_selected(tile):
+        if self.game.board is None:
             self.game.select(i,j)
+        elif not self.game.is_selected(self.game.board.board[i][j]):
+            self.game.select(i, j)
         else:
             self.make_random_selection()
+
+        # if self.game.board is not None:
+        #     tile = self.game.board.board[i][j]
+        # elif not self.game.is_selected(tile):
+        #     self.game.select(i,j)
+        # # if not self.game.is_selected(tile):
+        #     # self.game.select(i,j)
+        # else:
+        #     self.make_random_selection()
 
     def identify_selections(self):
         """

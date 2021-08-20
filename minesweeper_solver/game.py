@@ -38,12 +38,12 @@ class MineSweeper:
         if self.board is None:
             self.generate_board(i, j)
 
-        tile = self.board[i][j]
+        tile = self.board.board[i][j]
 
         if self.is_selected(tile) or self.is_flagged(tile):
             return
 
-        tile.total_selections += 1
+        self.total_selections += 1
         tile._is_hidden = False
 
         if tile.is_mine():
