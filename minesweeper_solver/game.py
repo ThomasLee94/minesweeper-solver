@@ -45,6 +45,7 @@ class MineSweeper:
 
         self.total_selections += 1
         tile._is_hidden = False
+        tile.selected = True
 
         if tile.is_mine():
             self.mine_selected = True
@@ -80,18 +81,18 @@ class MineSweeper:
     def display_number_tile(self, tile):
         return tile.num_adjacent_mines
     
-    def is_mine(self, i, j):
+    def is_mine(self, tile):
         """
         checks if the hidden_board[i][j] is a mine (not seen by solver)
         """
-        return self.board[i][j].is_mine()
+        return tile.is_mine()
     
-    def is_blank(self, i, j):
+    def is_blank(self, tile):
         """
         Checks if [i][j] is a hidden tile on 
         the hidden board (not seen by the solver) 
         """
-        return self.board[i][j].is_blank()
+        return tile.is_blank()
     
     def game_won(self):
         return self.width * self.height - self.num_mines == self.total_selections
@@ -185,7 +186,7 @@ class MineSweeper:
         Display terminal board function
         """
 
-        tile = self.board[i][j]
+        tile = self.board.board[i][j]
 
         if not self.is_selected(tile) and not self.is_flagged(tile):
             # block representation of blocked tile
@@ -244,12 +245,12 @@ def debug(minesweeper):
 
 if __name__ == '__main__':
     minesweeper = MineSweeper(4, 4, 5)
-    # minesweeper.generate_board(1,1)
+    minesweeper.generate_board(1,1)
     
     # debug(minesweeper)
 
     m = minesweeper
-    # m.play_game()
+    m.play_game()
 
     print(m)
 

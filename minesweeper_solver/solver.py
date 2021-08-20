@@ -75,15 +75,6 @@ class MineSweeperSolver:
         else:
             self.make_random_selection()
 
-        # if self.game.board is not None:
-        #     tile = self.game.board.board[i][j]
-        # elif not self.game.is_selected(tile):
-        #     self.game.select(i,j)
-        # # if not self.game.is_selected(tile):
-        #     # self.game.select(i,j)
-        # else:
-        #     self.make_random_selection()
-
     def identify_selections(self):
         """
         Find all selections with 100% certainty.
