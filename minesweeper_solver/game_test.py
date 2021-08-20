@@ -15,7 +15,5 @@ def test_generate_board():
     game = MineSweeper(4, 4, 5)
     game.generate_board(1,1)
 
-    print
-
     if not isinstance(game.board, Board): raise TypeError
 

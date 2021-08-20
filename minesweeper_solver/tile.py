@@ -8,6 +8,7 @@ class Tile:
         self._is_blank = True 
         self._is_mine = is_mine
         self.num_adjacent_mines = num_adjacent_mines
+        self._is_hidden = True
         self.flagged = False
         self.selected = False
 
@@ -50,5 +51,8 @@ class Tile:
 
     def make_mine(self):
         self._is_mine = True
+    
+    def is_hidden(self):
+        return self._is_hidden
 
     

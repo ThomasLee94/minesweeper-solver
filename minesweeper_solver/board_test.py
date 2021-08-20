@@ -19,6 +19,22 @@ def test_board_no_mines():
             if board.board[i][j].is_blank() is not True: raise AssertionError
             if board.board[i][j].num_adjacent_mines != 0: raise AssertionError
 
+def test_board_hidden_tiles():
+    board = Board(5, 5)
+
+    hidden_tiles = 5 * 5
+    hidden_tiles_counter = 0
+
+    for i in range(len(board.board)):
+        for j in range(len(board.board[i])):
+            if board.board[i][j].is_hidden():
+                hidden_tiles_counter += 1
+    
+    assert hidden_tiles == hidden_tiles_counter
+
+def test_board_selections():
+    pass
+
 def test_board_blanks():
     board = Board(5, 5)
 

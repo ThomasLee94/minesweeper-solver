@@ -44,6 +44,7 @@ class MineSweeper:
             return
 
         tile.total_selections += 1
+        tile._is_hidden = False
 
         if tile.is_mine():
             self.mine_selected = True
@@ -133,9 +134,9 @@ class MineSweeper:
                 if self.board._is_inbounds(i, j):
                     self.generate_board(i, j)
                     self.select(i, j)
-                else:
-                    self.hidden_board = None
-                    self.visible_board = None
+                # else:
+                #     self.hidden_board = None
+                #     self.visible_board = None
 
             tile = self.board[i][j]
 
