@@ -31,30 +31,7 @@ class MineSweeper:
         board.add_mines(self.num_mines, tile)
         self.board = board
         self.select(tile)
-    
-    def select(self, tile):
-        '''
-        Selects tiles in the visible board if it is selectable, if the tile
-        is blank recursively select all of its neighbours
-        '''
-        if self.board is None:
-            self.generate_board(tile)
 
-        if self.is_selected(tile) or self.is_flagged(tile):
-            return
-
-        self.total_selections += 1
-        tile.unhide() 
-        tile.selected = True
-
-        if tile.is_mine():
-            self.mine_selected = True
-
-        # select all neighbours of blank tiles
-        if tile.is_blank():
-            for neighbour_tile in self.board.get_neighbours(tile):
-                self.select(neighbour_tile)
-        
     def is_flagged(self, tile):
         """
         Checks if [i][j] is flagged on the visible board (seen by solver) 
@@ -67,18 +44,6 @@ class MineSweeper:
         """
         return tile.selected
 
-    def flag(self, tile):
-        """
-        Flags/deflags at the given coordinate
-        """
-
-        # deflag
-        if self.is_flagged(tile):
-            tile.flagged = False
-
-        elif not self.is_selected(tile):
-            tile.selected = True
-    
     def display_number_tile(self, tile):
         return tile.num_adjacent_mines
     
@@ -95,11 +60,7 @@ class MineSweeper:
         """
         return tile.is_blank()
     
-    def game_won(self):
-        return self.width * self.height - self.num_mines == self.total_selections
-    
-    def game_lost(self):
-        return self.mine_selected
+
 
     def play_game(self):
         """
