@@ -1,7 +1,7 @@
 import random
 from tile import Tile
 
-class Board(Tile):
+class Board:
     def __init__(self, width, height):
         self.board = []
         self.width = width
@@ -18,27 +18,35 @@ class Board(Tile):
     
     def __str__(self):
         return f'{str(self.__class__)}'
+    
+    def __iter__(self):
+        for i in range(self.height):
+            for j in range(self.width):
+                yield self.board[i][j]
 
-    def add_mines(self, num_mines, i, j):
+    def add_mines(self, num_mines, tile):
         """
         Randomly add the number of mines to the board.
         """
 
-        ignore_tiles = set()
-        ignore_tiles.add(id(self.board[i][j])) # add id of tile obj
+        i = tile.i 
+        j = tile.j
 
-        for neighbour_tile in self.get_neighbours(i, j):
-            ignore_tiles.add(id(neighbour_tile))
+        ignore_tiles = set()
+        ignore_tiles.add((i,j)) 
+
+        for neighbour_tile in self.get_neighbours(tile):
+            ignore_tiles.add((neighbour_tile.i, neighbour_tile.j))
 
         while num_mines != 0:
             ri = random.randint(0, self.height - 1)
             rj = random.randint(0, self.width - 1)
-            tile = self.board[ri][rj]
+            new_tile = self.board[ri][rj]
             # dont place a mine in the same spot twice
-            if self._is_mine(tile) or id(tile) in ignore_tiles:
+            if self._is_mine(new_tile) or (new_tile.i, new_tile.j) in ignore_tiles:
                 continue
-            tile.make_mine()
-            self.increment_adjacents(ri, rj)
+            new_tile.make_mine()
+            self.increment_adjacents(new_tile)
             num_mines -= 1
 
     def _is_inbounds(self, i, j):
@@ -47,21 +55,23 @@ class Board(Tile):
     def _is_mine(self, tile):
         return tile._is_mine is True
 
-    def increment_adjacents(self, i, j):
+    def increment_adjacents(self, tile):
+        i, j = tile.i, tile.j
         """
         increments all adjacents of mines by 1 that are not mines
         """
 
-        for ni, nj in self.get_neighbours(i, j):
-            if not self.board[ni][nj].is_mine():
-                self.board[ni][nj].num_adjacent_mines += 1
+        for neighbour_tile in self.get_neighbours(tile):
+            neighbour_tile.num_adjacent_mines += 1
     
-    def get_neighbours(self, i, j):
+    def get_neighbours(self, tile):
         """
         Returns a list of all inbounds coorinates of the given
         i & j. 
         """
 
+        i,j = tile.i, tile.j
+        
         directions = [
             (i - 1, j), # up
             (i + 1, j), # down
@@ -74,8 +84,8 @@ class Board(Tile):
         ]
 
         for ni, nj in directions:
-            if self._is_inbounds(ni, nj):
-                yield ni, nj
+            if self._is_inbounds(ni,nj):
+                yield self.board[ni][nj]
     
 
     

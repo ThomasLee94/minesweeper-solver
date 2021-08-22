@@ -8,8 +8,6 @@ class Tile:
         self._is_blank = True 
         self._is_mine = is_mine
         self.num_adjacent_mines = num_adjacent_mines
-        self._is_hidden = True
-        self.flagged = False
         self.selected = False
 
     def __repr__(self):
@@ -40,9 +38,6 @@ class Tile:
     def __eq__(self, other_tile):
         return id(self) == id(other_tile)
 
-    def coordinates(self):
-        return self.i, self.j
-    
     def is_mine(self):
         return self._is_mine
 
@@ -52,13 +47,5 @@ class Tile:
     def make_mine(self):
         self._is_mine = True
     
-    def is_hidden(self):
-        return self._is_hidden
-    
     def is_selected(self):
         return self.selected
-    
-    def unhide(self):
-        self._is_hidden = False
-
-    

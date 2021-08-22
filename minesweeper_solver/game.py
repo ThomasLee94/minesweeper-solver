@@ -1,4 +1,6 @@
 from board import Board
+from game_board import GameBoard
+from tile import Tile
 
 class MineSweeper:
     def __init__(self, width, height, num_mines):
@@ -18,7 +20,7 @@ class MineSweeper:
     def __str__(self):
         return f'{str(self.__class__)}'
         
-    def generate_board(self, i, j):
+    def generate_board(self, tile):
         """
         Generate board based on user input,
         create bombs around the coordinate
@@ -26,19 +28,17 @@ class MineSweeper:
         """
 
         board = Board(self.width, self.height)
-        board.add_mines(self.num_mines, i, j)
-        self.select(i,j)
+        board.add_mines(self.num_mines, tile)
         self.board = board
+        self.select(tile)
     
-    def select(self, i, j):
+    def select(self, tile):
         '''
         Selects tiles in the visible board if it is selectable, if the tile
         is blank recursively select all of its neighbours
         '''
         if self.board is None:
-            self.generate_board(i, j)
-
-        tile = self.board.board[i][j]
+            self.generate_board(tile)
 
         if self.is_selected(tile) or self.is_flagged(tile):
             return
@@ -52,9 +52,8 @@ class MineSweeper:
 
         # select all neighbours of blank tiles
         if tile.is_blank():
-            for ni, nj in self.board.get_neighbours(i,j):
-                print(ni,nj)
-                self.select(ni, nj)
+            for neighbour_tile in self.board.get_neighbours(tile):
+                self.select(neighbour_tile)
         
     def is_flagged(self, tile):
         """
@@ -68,12 +67,11 @@ class MineSweeper:
         """
         return tile.selected
 
-    def flag(self, i, j):
+    def flag(self, tile):
         """
         Flags/deflags at the given coordinate
         """
 
-        tile = self.board.board[i][j]
         # deflag
         if self.is_flagged(tile):
             tile.flagged = False
@@ -181,12 +179,10 @@ class MineSweeper:
         color = colors[min(num, 5)]
         return f'{color}{num}{ENDC}'
     
-    def tile_representation(self, i, j):
+    def tile_representation(self, tile):
         """
         Display terminal board function
         """
-
-        tile = self.board.board[i][j]
 
         if not self.is_selected(tile) and not self.is_flagged(tile):
             # block representation of blocked tile
@@ -214,12 +210,19 @@ class MineSweeper:
         # place indicies/rows to see easily
         # rows.append('  ' + ''.join(map(str, range(self.width))))
 
-        for i in range(self.height):
-            row = ''
-            # row += f'{0} '
-            for j in range(self.width):
-                row += self.tile_representation(i, j)
+        for row in self.board.board:
+            row = ""
+            for tile in row:
+                print(self.tile_representation(tile))
+                row += self.tile_representation(tile)
             rows.append(row)
+
+        # for i in range(self.height):
+        #     row = ''
+        #     # row += f'{0} '
+        #     for j in range(self.width):
+        #         row += self.tile_representation(i, j)
+        #     rows.append(row)
         
         for row in rows:
             print(row)
@@ -245,14 +248,15 @@ def debug(minesweeper):
 
 if __name__ == '__main__':
     minesweeper = MineSweeper(4, 4, 5)
-    minesweeper.generate_board(1,1)
+    clicked_tile = Tile((1,1))
+    minesweeper.generate_board(clicked_tile)
     
     debug(minesweeper)
 
     m = minesweeper
     m.play_game()
 
-    print(m)
+    # print(m)
 
 
 

@@ -1,6 +1,6 @@
 from game import MineSweeper
 from board import Board
-import pytest
+from tile import Tile
 
 
 def test_game_init():
@@ -13,17 +13,17 @@ def test_game_init():
 
 def test_generate_board():
     game = MineSweeper(4, 4, 5)
-    game.generate_board(1,1)
+    clicked_tile = Tile((1,1))
+    game.generate_board(clicked_tile)
 
-    if not isinstance(game.board, Board): raise TypeError
+    assert isinstance(game.board, Board)
 
 def test_generate_board_select():
     game = MineSweeper(4, 4, 5)
-    game.generate_board(1,1)
+    clicked_tile = Tile((1,1))
+    game.generate_board(clicked_tile)
 
-    print(game.board.board[1][1].__str__)
-
-    assert game.board.board[1][1].is_mine() is False
-    assert game.board.board[1][1].is_hidden() is False
+    assert clicked_tile.is_mine() is False
+    assert clicked_tile.is_hidden() is False
 
 
