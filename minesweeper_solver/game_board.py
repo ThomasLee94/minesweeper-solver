@@ -3,17 +3,14 @@ from game_tile import GameTile
 
 class GameBoard(Board):
     def __init__(self, width, height):
-        super().__init__(
-            width, height
-        )
+        super().__init__(width, height)
 
-        self.game_board = []
-
+    def add_tiles_to_board(self):
         for i in range(self.height):
             row = []
             for j in range(self.width):
                 row.append(GameTile((i,j)))
-            self.game_board.append(row)
+            self.board.append(row)
 
     def select(self, game_tile):
         '''
@@ -56,9 +53,9 @@ class GameBoard(Board):
         return self.mine_selected
 
 if __name__ == "__main__":
-    game_board = GameBoard(5,5)
+    board = GameBoard(5,5)
 
-    print(game_board.game_board)
+    print(board.board)
 
     
     # GameBoard is a subclass of Boar
