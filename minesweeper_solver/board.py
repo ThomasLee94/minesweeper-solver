@@ -27,7 +27,7 @@ class Board:
                 row.append(Tile((i,j)))
             self.board.append(row)
 
-    def add_mines(self, num_mines, tile):
+    def add_mines(self, num_mines=5, tile=None):
         """
         Randomly add the number of mines to the board.
         """
