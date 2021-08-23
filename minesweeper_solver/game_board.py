@@ -3,7 +3,7 @@ from game_tile import GameTile
 
 class GameBoard(Board):
     def __init__(self, width, height):
-        super.__init__(
+        super().__init__(
             width, height
         )
 
@@ -13,7 +13,7 @@ class GameBoard(Board):
             row = []
             for j in range(self.width):
                 row.append(GameTile((i,j)))
-            self.board.append(row)
+            self.game_board.append(row)
 
     def select(self, game_tile):
         '''
@@ -54,6 +54,11 @@ class GameBoard(Board):
     
     def game_lost(self):
         return self.mine_selected
+
+if __name__ == "__main__":
+    game_board = GameBoard(5,5)
+
+    print(game_board.game_board)
 
     
     # GameBoard is a subclass of Boar

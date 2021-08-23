@@ -43,7 +43,7 @@ class Board:
             rj = random.randint(0, self.width - 1)
             new_tile = self.board[ri][rj]
             # dont place a mine in the same spot twice
-            if self._is_mine(new_tile) or (new_tile.i, new_tile.j) in ignore_tiles:
+            if new_tile.is_mine() or (new_tile.i, new_tile.j) in ignore_tiles:
                 continue
             new_tile.make_mine()
             self.increment_adjacents(new_tile)
