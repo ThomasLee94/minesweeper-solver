@@ -1,4 +1,3 @@
-from board import Board
 from game_board import GameBoard
 from tile import Tile
 
@@ -6,7 +5,7 @@ class MineSweeper:
     def __init__(self, width, height, num_mines):
         # self.hidden_board = None
         # self.visible_board = None # in visible board use 0,1,2 to show hidden, visible & flagged tiles
-        self.board = None
+        self.board = GameBoard(width, height)
         
         self.width = width
         self.height = height
@@ -20,18 +19,6 @@ class MineSweeper:
     def __str__(self):
         return f'{str(self.__class__)}'
         
-    def generate_board(self, tile):
-        """
-        Generate board based on user input,
-        create bombs around the coordinate
-        that user chooses.
-        """
-
-        board = Board(self.width, self.height)
-        board.add_mines(self.num_mines, tile)
-        self.board = board
-        self.select(tile)
-
     def is_flagged(self, tile):
         """
         Checks if [i][j] is flagged on the visible board (seen by solver) 
@@ -59,7 +46,6 @@ class MineSweeper:
         the hidden board (not seen by the solver) 
         """
         return tile.is_blank()
-    
 
 
     def play_game(self):
@@ -92,11 +78,8 @@ class MineSweeper:
                     j = -1
             
 
-            if self.board is None:
-                self.generate_board(0, 0)
-                if self.board._is_inbounds(i, j):
-                    self.generate_board(i, j)
-                    self.select(i, j)
+            if self.board._is_inbounds(i, j):
+                self.select(i, j)
 
             tile = self.board.board[i][j]
 

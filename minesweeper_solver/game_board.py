@@ -17,9 +17,6 @@ class GameBoard(Board):
         Selects given tile if it is selectable, if the tile
         is blank recursively select all of its neighbours
         '''
-        if self.board is None:
-            self.generate_board(game_tile)
-
         if self.is_selected(game_tile) or self.is_flagged(game_tile):
             return
 
