@@ -7,12 +7,8 @@ class Board:
         self.width = width
         self.height = height
 
-        for i in range(height):
-            row = []
-            for j in range(width):
-                row.append(Tile((i,j)))
-            self.board.append(row)
-    
+        self.add_tiles_to_board()
+
     # def __repr__(self):
     #     return f'Board(board={self.board}, width={self.width}, height={self.height})'
     
@@ -23,6 +19,13 @@ class Board:
         for i in range(self.height):
             for j in range(self.width):
                 yield self.board[i][j]
+            
+    def add_tiles_to_board(self):
+        for i in range(self.height):
+            row = []
+            for j in range(self.width):
+                row.append(Tile((i,j)))
+            self.board.append(row)
 
     def add_mines(self, num_mines, tile):
         """

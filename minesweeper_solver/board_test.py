@@ -4,14 +4,14 @@ from game_board import GameBoard
 def test_board_no_mines():
     board = GameBoard(5, 5)
 
-    print(board.game_board)
+    print(board.board)
 
-    assert len(board.game_board) == 5
-    assert len(board.game_board[0]) == 5 
+    assert len(board.board) == 5
+    assert len(board.board[0]) == 5 
 
-    for i in range(len(board.game_board)):
-        for j in range(len(board.game_board[i])):
-            game_tile = board.game_board[i][j]
+    for i in range(len(board.board)):
+        for j in range(len(board.board[i])):
+            game_tile = board.board[i][j]
             assert isinstance(game_tile, GameTile)
             assert game_tile.i == i
             assert game_tile.j == j
@@ -25,7 +25,7 @@ def test_board_invisible_tiles():
 
     invisible_tiles_counter = 5 * 5
 
-    for row in board.game_board:
+    for row in board.board:
         for game_tile in row:
             if not game_tile.is_visible():
                 invisible_tiles_counter -= 1
@@ -35,7 +35,7 @@ def test_board_invisible_tiles():
 def test_board_blanks():
     board = GameBoard(5, 5)
 
-    for row in board.game_board:
+    for row in board.board:
         for game_tile in row:
             # if tile val is 0, assert that it is blank
             if game_tile.num_adjacent_mines == 0:
@@ -51,15 +51,15 @@ def test_board_blanks():
 
 def test_board_with_mines_counter():
     board = GameBoard(5, 5)
-    game_tile = board.game_board[1][1]
+    game_tile = board.board[1][1]
     board.add_mines(5, game_tile)
 
     assert game_tile.is_mine() is False
 
     mine_counter = 0
 
-    print(board.game_board)
-    for row in board.game_board:
+    print(board.board)
+    for row in board.board:
         for new_game_tile in row:
             if new_game_tile.is_mine():
                 mine_counter += 1
@@ -68,10 +68,10 @@ def test_board_with_mines_counter():
 
 def test_board_with_mines_adjacent_vals():
     board = GameBoard(5, 5)
-    game_tile = board.game_board[1][1]
+    game_tile = board.board[1][1]
     board.add_mines(5, game_tile)
 
-    for row in board.game_board:
+    for row in board.board:
         for game_tile in row:
             if game_tile.num_adjacent_mines > 0:
                 adjacent_mines = 0
