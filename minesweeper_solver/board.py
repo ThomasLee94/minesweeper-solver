@@ -2,10 +2,11 @@ import random
 from tile import Tile
 
 class Board:
-    def __init__(self, width, height):
+    def __init__(self, width, height, num_mines):
         self.board = []
         self.width = width
         self.height = height
+        self.num_mines = num_mines
 
         self.add_tiles_to_board()
 
@@ -27,7 +28,7 @@ class Board:
                 row.append(Tile((i,j)))
             self.board.append(row)
 
-    def add_mines(self, num_mines, tile):
+    def add_mines(self, tile):
         """
         Randomly add the number of mines to the board.
         """
@@ -41,7 +42,9 @@ class Board:
         for neighbour_tile in self.get_neighbours(tile):
             ignore_tiles.add((neighbour_tile.i, neighbour_tile.j))
 
-        while num_mines != 0:
+        mines_to_add = self.num_mines
+
+        while mines_to_add > 0:
             ri = random.randint(0, self.height - 1)
             rj = random.randint(0, self.width - 1)
             new_tile = self.board[ri][rj]
@@ -50,7 +53,7 @@ class Board:
                 continue
             new_tile.make_mine()
             self.increment_adjacents(new_tile)
-            num_mines -= 1
+            mines_to_add -= 1
 
     def _is_inbounds(self, i, j):
         return 0 <= i < self.height and 0 <= j < self.width
@@ -89,6 +92,3 @@ class Board:
         for ni, nj in directions:
             if self._is_inbounds(ni,nj):
                 yield self.board[ni][nj]
-    
-
-    
