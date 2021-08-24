@@ -3,7 +3,8 @@ from game_tile import GameTile
 
 class GameBoard(Board):
     def __init__(self, width, height):
-        super().__init__(width, height)
+        super().__init__(width, height, num_mines=0)
+        self.total_selections = 0
 
     def add_tiles_to_board(self):
         for i in range(self.height):
@@ -12,16 +13,18 @@ class GameBoard(Board):
                 row.append(GameTile((i,j)))
             self.board.append(row)
 
-    def select(self, game_tile):
+    def select(self, tile):
         '''
         Selects given tile if it is selectable, if the tile
         is blank recursively select all of its neighbours
         '''
-        if self.is_selected(game_tile) or self.is_flagged(game_tile):
+        # NOTE: this is a stilt
+        game_tile = self.board[tile.i][tile.j]
+
+        if game_tile.is_selected() or game_tile.is_flagged():
             return
 
         self.total_selections += 1
-        game_tile.unhide() 
         game_tile.selected = True
 
         if game_tile.is_mine():
@@ -29,7 +32,7 @@ class GameBoard(Board):
 
         # select all neighbours of blank tiles
         if game_tile.is_blank():
-            for neighbour_tile in self.board.get_neighbours(game_tile):
+            for neighbour_tile in self.get_neighbours(game_tile):
                 self.select(neighbour_tile)
 
     def flag(self, game_tile):
