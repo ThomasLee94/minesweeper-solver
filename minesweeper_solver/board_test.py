@@ -2,7 +2,7 @@ from game_tile import GameTile
 from game_board import GameBoard
 
 def test_board_no_mines():
-    board = GameBoard(5, 5)
+    board = GameBoard(5, 5, 5)
 
     print(board.board)
 
@@ -21,7 +21,7 @@ def test_board_no_mines():
             assert game_tile.num_adjacent_mines == 0
 
 def test_board_invisible_tiles():
-    board = GameBoard(5, 5)
+    board = GameBoard(5, 5, 5)
 
     invisible_tiles_counter = 5 * 5
 
@@ -33,7 +33,7 @@ def test_board_invisible_tiles():
     assert invisible_tiles_counter == 0
 
 def test_board_blanks():
-    board = GameBoard(5, 5)
+    board = GameBoard(5, 5, 5)
 
     for row in board.board:
         for game_tile in row:
@@ -50,9 +50,9 @@ def test_board_blanks():
                 assert game_tile.num_adjacent_mines >= 0
 
 def test_board_with_mines_counter():
-    board = GameBoard(5, 5)
+    board = GameBoard(5, 5, 5)
     game_tile = board.board[1][1]
-    board.add_mines(5, game_tile)
+    board.select(game_tile)
 
     assert game_tile.is_mine() is False
 
@@ -67,9 +67,9 @@ def test_board_with_mines_counter():
     assert mine_counter == 5
 
 def test_board_with_mines_adjacent_vals():
-    board = GameBoard(5, 5)
+    board = GameBoard(5, 5, 5)
     game_tile = board.board[1][1]
-    board.add_mines(5, game_tile)
+    board.add_mines(game_tile)
 
     for row in board.board:
         for game_tile in row:

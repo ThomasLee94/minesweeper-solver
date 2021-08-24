@@ -5,7 +5,7 @@ class MineSweeper:
     def __init__(self, width, height, num_mines):
         # self.hidden_board = None
         # self.visible_board = None # in visible board use 0,1,2 to show hidden, visible & flagged tiles
-        self.board = GameBoard(width, height)
+        self.board = GameBoard(width, height, num_mines)
         
         self.width = width
         self.height = height

@@ -2,8 +2,8 @@ from board import Board
 from game_tile import GameTile
 
 class GameBoard(Board):
-    def __init__(self, width, height):
-        super().__init__(width, height, num_mines=0)
+    def __init__(self, width, height, num_mines):
+        super().__init__(width, height, num_mines)
         self.total_selections = 0
 
     def add_tiles_to_board(self):
@@ -13,13 +13,13 @@ class GameBoard(Board):
                 row.append(GameTile((i,j)))
             self.board.append(row)
 
-    def select(self, tile):
+    def select(self, game_tile):
         '''
         Selects given tile if it is selectable, if the tile
         is blank recursively select all of its neighbours
         '''
-        # NOTE: this is a stilt
-        game_tile = self.board[tile.i][tile.j]
+        if self.total_selections == 0:
+            self.add_mines(game_tile)
 
         if game_tile.is_selected() or game_tile.is_flagged():
             return
@@ -53,7 +53,7 @@ class GameBoard(Board):
         return self.mine_selected
 
 if __name__ == "__main__":
-    board = GameBoard(5,5)
+    board = GameBoard(5, 5, 5)
 
     print(board.board)
 
