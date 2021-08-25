@@ -6,12 +6,12 @@
 
 # search for all zeros that are connected to ititial 0 (bfs or dfs)
  
-from game import MineSweeper
+from game import Game
 import random
 
 class MineSweeperSolver:
     def __init__(self, width, height, num_mines):
-        self.game = MineSweeper(width, height, num_mines) 
+        self.game = Game(width, height, num_mines) 
     
     def get_visible_numbers(self):
         """
@@ -20,10 +20,10 @@ class MineSweeperSolver:
         """
         visible_nums = []
 
-        for i in range(self.game.height):
-            for j in range(self.game.width):
-                if self.game.is_selected(self.game.board.board[i][j]):
-                    visible_nums.append((i, j))
+        for row in self.game.board.board:
+            for tile in row:
+                if self.game.is_selected(tile):
+                    visible_nums.append(tile.num_adjacent_mins)
         
         return visible_nums
     

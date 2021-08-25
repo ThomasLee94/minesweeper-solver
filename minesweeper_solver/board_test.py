@@ -27,7 +27,7 @@ def test_board_invisible_tiles():
 
     for row in board.board:
         for game_tile in row:
-            if not game_tile.is_visible():
+            if not game_tile.is_selected():
                 invisible_tiles_counter -= 1
     
     assert invisible_tiles_counter == 0

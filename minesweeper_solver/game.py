@@ -1,7 +1,6 @@
 from game_board import GameBoard
-from tile import Tile
 
-class MineSweeper:
+class Game:
     def __init__(self, width, height, num_mines):
         # self.hidden_board = None
         # self.visible_board = None # in visible board use 0,1,2 to show hidden, visible & flagged tiles
@@ -19,17 +18,17 @@ class MineSweeper:
     def __str__(self):
         return f'{str(self.__class__)}'
         
-    def is_flagged(self, tile):
-        """
-        Checks if [i][j] is flagged on the visible board (seen by solver) 
-        """
-        return tile.flagged is True
+    # def is_flagged(self, tile):
+    #     """
+    #     Checks if [i][j] is flagged on the visible board (seen by solver) 
+    #     """
+    #     return tile.is_flagged() is True
     
-    def is_selected(self, tile):
-        """
-        checks if visible_board[i][j] is selected (seen by solver)
-        """
-        return tile.selected
+    # def is_selected(self, tile):
+    #     """
+    #     checks if visible_board[i][j] is selected (seen by solver)
+    #     """
+    #     return tile.selected
 
     def display_number_tile(self, tile):
         return tile.num_adjacent_mines
@@ -53,7 +52,7 @@ class MineSweeper:
         Starts the game and asks for user input for terminal game. 
         Runs the rest of the game turn based logic.
         """
-        while not (self.game_won() or self.game_lost()):
+        while not (self.board.game_won() or self.board.game_lost()):
             # ask user if they want to place flag or select tile
             f_or_s = None
             while f_or_s != 'f' and f_or_s != 's':
@@ -77,30 +76,29 @@ class MineSweeper:
                 else:
                     j = -1
             
-
-            if self.board._is_inbounds(i, j):
-                self.select(i, j)
-
             tile = self.board.board[i][j]
 
+            if self.board._is_inbounds(i, j):
+                self.board.select(tile)
+
             # select or flag given coords. if the given coords selected, ask again
-            if self.is_selected(tile):
+            if tile.is_selected():
                 print("try again")
             # if the given coords are flagged and the user selected to select, ask again
-            elif self.is_flagged(tile) and f_or_s == 's':
+            elif tile.is_flagged() and f_or_s == 's':
                 print('try again')
             elif not self.board._is_inbounds(i, j):
                 print('try again')
             # if the user asked to select, select the coords given. 
             elif f_or_s == 's':
-                self.select(i,j)
+                self.board.select(tile)
             # if user asked to flag, flag or deflag the given coords. 
             elif f_or_s == 'f':
-                self.flag(i,j)
+                self.board.flag(tile)
             
             self.display_board()
         
-        if self.game_lost():
+        if self.board.game_lost():
             print("You lost")
         else:
             print("You won")
@@ -128,19 +126,19 @@ class MineSweeper:
         Display terminal board function
         """
 
-        if not self.is_selected(tile) and not self.is_flagged(tile):
+        if not tile.is_selected() and not tile.is_flagged():
             # block representation of blocked tile
             return '\u2588'
 
-        elif self.is_flagged(tile):
+        elif tile.is_flagged():
             # red block to show flag
             return '\033[91m\u2588\033[0m'
 
-        elif self.is_blank(tile):
+        elif tile.is_blank():
             # blank visible tile
             return ' '
 
-        elif self.is_mine(tile):
+        elif tile.is_mine():
             return '\033[91m*\033[0m'
         else:
             # the number on the visible tile
@@ -160,13 +158,6 @@ class MineSweeper:
                 print(self.tile_representation(tile))
                 row += self.tile_representation(tile)
             rows.append(row)
-
-        # for i in range(self.height):
-        #     row = ''
-        #     # row += f'{0} '
-        #     for j in range(self.width):
-        #         row += self.tile_representation(i, j)
-        #     rows.append(row)
         
         for row in rows:
             print(row)
@@ -191,14 +182,14 @@ def debug(minesweeper):
 
 
 if __name__ == '__main__':
-    minesweeper = MineSweeper(4, 4, 5)
-    clicked_tile = Tile((1,1))
-    minesweeper.generate_board(clicked_tile)
+    game = Game(4, 4, 5)
+    clicked_tile = game.board.board[1][1]
+    game.board.select(clicked_tile)
     
-    debug(minesweeper)
+    debug(game)
 
-    m = minesweeper
-    m.play_game()
+    g = game
+    g.play_game()
 
     # print(m)
 

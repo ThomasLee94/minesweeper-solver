@@ -8,7 +8,6 @@ class Tile:
         self._is_blank = True 
         self._is_mine = is_mine
         self.num_adjacent_mines = num_adjacent_mines
-        self.selected = False
 
     def __repr__(self):
         return f'Tile(coords={self.i, self.j}, num_adj_mines={self.num_adjacent_mines}, is_mine={self.is_mine()})'
@@ -47,5 +46,3 @@ class Tile:
     def make_mine(self):
         self._is_mine = True
     
-    def is_selected(self):
-        return self.selected

@@ -9,9 +9,6 @@ class Board:
         self.num_mines = num_mines
 
         self.add_tiles_to_board()
-
-    # def __repr__(self):
-    #     return f'Board(board={self.board}, width={self.width}, height={self.height})'
     
     def __str__(self):
         return f'{str(self.__class__)}'
@@ -21,6 +18,9 @@ class Board:
             for j in range(self.width):
                 yield self.board[i][j]
             
+    def _is_inbounds(self, i, j):
+        return 0 <= i < self.height and 0 <= j < self.width
+
     def add_tiles_to_board(self):
         for i in range(self.height):
             row = []
@@ -55,14 +55,7 @@ class Board:
             self.increment_adjacents(new_tile)
             mines_to_add -= 1
 
-    def _is_inbounds(self, i, j):
-        return 0 <= i < self.height and 0 <= j < self.width
-    
-    def _is_mine(self, tile):
-        return tile._is_mine is True
-
     def increment_adjacents(self, tile):
-        i, j = tile.i, tile.j
         """
         increments all adjacents of mines by 1 that are not mines
         """

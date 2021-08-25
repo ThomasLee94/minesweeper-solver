@@ -25,7 +25,7 @@ class GameBoard(Board):
             return
 
         self.total_selections += 1
-        game_tile.selected = True
+        game_tile._is_selected = True
 
         if game_tile.is_mine():
             self.mine_selected = True
