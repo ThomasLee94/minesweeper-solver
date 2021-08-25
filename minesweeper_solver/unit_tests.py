@@ -61,8 +61,9 @@ def test_board_with_mines_counter():
     assert game_tile.is_mine() is False
 
     mine_counter = 0
+    blank_tile_counter = 0
+    all_blank_tiles = (board.width * board.height) - 6
 
-    print(board.board)
     for row in board.board:
         for new_game_tile in row:
             if new_game_tile.is_mine():

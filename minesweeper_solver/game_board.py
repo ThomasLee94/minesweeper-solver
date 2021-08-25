@@ -28,14 +28,14 @@ class GameBoard(Board):
         self.total_selections += 1
         game_tile._is_selected = True
 
-        # if game_tile.is_mine():
-        #     self.mine_selected = True
-        #     return
+        if game_tile.is_mine():
+            self.mine_selected = True
 
-        # select all neighbours of blank tiles
+        # if selected tile is blank, recurse over its blank neighbours.
         if game_tile.is_blank():
             for neighbour_tile in self.get_neighbours(game_tile):
-                self.select(neighbour_tile)
+                if neighbour_tile.is_blank():
+                    self.select(neighbour_tile)
 
     def flag(self, game_tile):
         """
@@ -45,13 +45,14 @@ class GameBoard(Board):
         if self.is_flagged(game_tile):
             game_tile.flagged = False
 
-        elif not self.is_selected(game_tile):
-            game_tile.selected = True
+        # elif not self.is_selected(game_tile):
+        #     game_tile.selected = True
 
     def game_over(self):
         return self.game_won() is True or self.game_lost() is True
 
     def game_won(self):
+        print(self.width, self.height, self.num_mines, self.total_selections)
         return self.width * self.height - self.num_mines == self.total_selections
     
     def game_lost(self):
@@ -61,10 +62,3 @@ if __name__ == "__main__":
     board = GameBoard(5, 5, 5)
 
     print(board.board)
-
-    
-    # GameBoard is a subclass of Boar
-    # GameTile is a subclass of Tile
-
-    # Board contains a matrix of Tiles
-    # GameBoard contains a matrix of GameTiles

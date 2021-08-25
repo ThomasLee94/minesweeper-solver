@@ -62,6 +62,7 @@ class Board:
 
         for neighbour_tile in self.get_neighbours(tile):
             neighbour_tile.num_adjacent_mines += 1
+            neighbour_tile._is_blank = False
     
     def get_neighbours(self, tile):
         """
@@ -69,7 +70,7 @@ class Board:
         i & j. 
         """
 
-        i,j = tile.i, tile.j
+        i, j = tile.i, tile.j
         
         directions = [
             (i - 1, j), # up

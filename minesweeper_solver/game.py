@@ -1,4 +1,5 @@
 from game_board import GameBoard
+import pprint
 
 class Game:
     def __init__(self, width, height, num_mines):
@@ -7,7 +8,6 @@ class Game:
         self.width = width
         self.height = height
         self.num_mines = num_mines
-        self.total_selections = 0
         
     def __str__(self):
         return f'{str(self.__class__)}'
@@ -24,6 +24,8 @@ class Game:
         print("game over: ", self.board.game_over())
         print("game won: ", self.board.game_won())
         print("game lost: ", self.board.game_lost())
+
+        pprint.pprint(self.board.board)
 
         while not self.board.game_over():
             print("input")
@@ -55,8 +57,6 @@ class Game:
             if self.board._is_inbounds(i, j):
                 self.board.select(tile)
             
-            print(tile)
-
             # select or flag given coords. if the given coords selected, ask again
             if tile.is_selected():
                 print("try again, this tile is already selected")

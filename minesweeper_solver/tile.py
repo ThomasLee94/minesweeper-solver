@@ -45,4 +45,5 @@ class Tile:
 
     def make_mine(self):
         self._is_mine = True
+        self._is_blank = False
     
