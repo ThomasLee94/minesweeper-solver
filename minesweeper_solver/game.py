@@ -11,25 +11,10 @@ class Game:
         self.num_mines = num_mines
         self.total_selections = 0
         self.mine_selected = False
-    
-    # def __repr__(self):
-    #     return f"MineSweeper(board={self.board.board})"
         
     def __str__(self):
         return f'{str(self.__class__)}'
         
-    # def is_flagged(self, tile):
-    #     """
-    #     Checks if [i][j] is flagged on the visible board (seen by solver) 
-    #     """
-    #     return tile.is_flagged() is True
-    
-    # def is_selected(self, tile):
-    #     """
-    #     checks if visible_board[i][j] is selected (seen by solver)
-    #     """
-    #     return tile.selected
-
     def display_number_tile(self, tile):
         return tile.num_adjacent_mines
     
