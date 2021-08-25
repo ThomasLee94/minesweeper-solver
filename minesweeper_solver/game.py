@@ -2,8 +2,6 @@ from game_board import GameBoard
 
 class Game:
     def __init__(self, width, height, num_mines):
-        # self.hidden_board = None
-        # self.visible_board = None # in visible board use 0,1,2 to show hidden, visible & flagged tiles
         self.board = GameBoard(width, height, num_mines)
         
         self.width = width
@@ -22,11 +20,13 @@ class Game:
         Starts the game and asks for user input for terminal game. 
         Runs the rest of the game turn based logic.
         """
-        print("yo")
-        print("game lost: ", self.board.game_lost())
+        print("hello")
+        print("game over: ", self.board.game_over())
         print("game won: ", self.board.game_won())
-        while not (self.board.game_won() or self.board.game_lost()):
-            print("input bro")
+        print("game lost: ", self.board.game_lost())
+
+        while not self.board.game_over():
+            print("input")
             # ask user if they want to place flag or select tile
             f_or_s = None
             while f_or_s != 'f' and f_or_s != 's':
@@ -59,12 +59,12 @@ class Game:
 
             # select or flag given coords. if the given coords selected, ask again
             if tile.is_selected():
-                print("try again")
+                print("try again, this tile is already selected")
             # if the given coords are flagged and the user selected to select, ask again
             elif tile.is_flagged() and f_or_s == 's':
-                print('try again')
+                print('try again, this tile is already flaggeds')
             elif not self.board._is_inbounds(i, j):
-                print('try again')
+                print('try again, coordinates out of bounds')
             # if the user asked to select, select the coords given. 
             elif f_or_s == 's':
                 self.board.select(tile)
@@ -162,8 +162,7 @@ if __name__ == '__main__':
     clicked_tile = game.board.board[1][1]
     game.board.select(clicked_tile)
     
-    g = game
-    g.play_game()
+    game.play_game()
 
     # print(m)
 

@@ -28,8 +28,9 @@ class GameBoard(Board):
         self.total_selections += 1
         game_tile._is_selected = True
 
-        if game_tile.is_mine():
-            self.mine_selected = True
+        # if game_tile.is_mine():
+        #     self.mine_selected = True
+        #     return
 
         # select all neighbours of blank tiles
         if game_tile.is_blank():
@@ -46,6 +47,9 @@ class GameBoard(Board):
 
         elif not self.is_selected(game_tile):
             game_tile.selected = True
+
+    def game_over(self):
+        return self.game_won() is True or self.game_lost() is True
 
     def game_won(self):
         return self.width * self.height - self.num_mines == self.total_selections

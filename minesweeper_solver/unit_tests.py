@@ -1,5 +1,9 @@
-from game_tile import GameTile
 from game_board import GameBoard
+from game_tile import GameTile
+from game import Game
+from solver import MineSweeperSolver
+
+########## BOARD TEST ##########
 
 def test_board_no_mines():
     board = GameBoard(5, 5, 5)
@@ -50,7 +54,7 @@ def test_board_blanks():
                 assert game_tile.num_adjacent_mines >= 0
 
 def test_board_with_mines_counter():
-    board = GameBoard(5, 5, 5)
+    board = GameBoard(5, 5, 6)
     game_tile = board.board[1][1]
     board.select(game_tile)
 
@@ -64,7 +68,7 @@ def test_board_with_mines_counter():
             if new_game_tile.is_mine():
                 mine_counter += 1
 
-    assert mine_counter == 5
+    assert mine_counter == 6
 
 def test_board_with_mines_adjacent_vals():
     board = GameBoard(5, 5, 5)
@@ -81,3 +85,59 @@ def test_board_with_mines_adjacent_vals():
                         adjacent_mines += 1
             
                 assert game_tile.num_adjacent_mines == adjacent_mines
+
+
+########## GAME TEST ##########
+
+def test_game_init():
+    game = Game(4, 4, 5)
+
+    assert game.board.game_won() is False
+    assert game.board.game_lost() is False
+    assert game.board.game_over() is False
+
+    assert len(game.board.board) == 4
+    assert len(game.board.board[0]) == 4
+    assert game.width == 4
+    assert game.height == 4
+    assert game.num_mines == 5
+
+def test_generate_board_on_select():
+    game = Game(4, 4, 5)
+    clicked_tile = game.board.board[1][1]
+    game.board.select(clicked_tile)
+
+    assert game.board.game_won() is False
+    assert game.board.game_lost() is False
+    assert game.board.game_over() is False
+
+    assert type(game.board) == GameBoard
+
+def test_generate_board_select():
+    game = Game(4, 4, 5)
+    clicked_tile = game.board.board[1][1]
+    game.board.select(clicked_tile)
+
+    assert clicked_tile.is_mine() is False
+    assert clicked_tile.is_selected() is True
+
+########## SOLVER TEST ##########
+
+def test_solver_init():
+    solver = MineSweeperSolver(4, 4, 5)
+
+    print(solver.game.board.board)
+
+    assert len(solver.game.board.board) == 4
+    assert len(solver.game.board.board[0]) == 4
+    assert solver.game.width == 4
+    assert solver.game.height == 4
+    assert solver.game.num_mines == 5
+
+# def test_solver_get_vis_nums():
+#     solver = MineSweeperSolver(4, 4, 5)
+#     clicked_tile = solver.board.board[1][1]
+#     solver.game.board.select(clicked_tile)
+
+#     assert solver.get_visible_numbers() == 5
+
