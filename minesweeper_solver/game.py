@@ -10,34 +10,23 @@ class Game:
         self.height = height
         self.num_mines = num_mines
         self.total_selections = 0
-        self.mine_selected = False
         
     def __str__(self):
         return f'{str(self.__class__)}'
         
     def display_number_tile(self, tile):
         return tile.num_adjacent_mines
-    
-    def is_mine(self, tile):
-        """
-        checks if the hidden_board[i][j] is a mine (not seen by solver)
-        """
-        return tile.is_mine()
-    
-    def is_blank(self, tile):
-        """
-        Checks if [i][j] is a hidden tile on 
-        the hidden board (not seen by the solver) 
-        """
-        return tile.is_blank()
-
 
     def play_game(self):
         """
         Starts the game and asks for user input for terminal game. 
         Runs the rest of the game turn based logic.
         """
+        print("yo")
+        print("game lost: ", self.board.game_lost())
+        print("game won: ", self.board.game_won())
         while not (self.board.game_won() or self.board.game_lost()):
+            print("input bro")
             # ask user if they want to place flag or select tile
             f_or_s = None
             while f_or_s != 'f' and f_or_s != 's':
@@ -65,6 +54,8 @@ class Game:
 
             if self.board._is_inbounds(i, j):
                 self.board.select(tile)
+            
+            print(tile)
 
             # select or flag given coords. if the given coords selected, ask again
             if tile.is_selected():
@@ -171,8 +162,6 @@ if __name__ == '__main__':
     clicked_tile = game.board.board[1][1]
     game.board.select(clicked_tile)
     
-    debug(game)
-
     g = game
     g.play_game()
 

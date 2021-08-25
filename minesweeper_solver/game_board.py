@@ -5,6 +5,7 @@ class GameBoard(Board):
     def __init__(self, width, height, num_mines):
         super().__init__(width, height, num_mines)
         self.total_selections = 0
+        self.mine_selected = False
 
     def add_tiles_to_board(self):
         for i in range(self.height):
