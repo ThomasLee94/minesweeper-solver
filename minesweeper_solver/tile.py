@@ -28,7 +28,7 @@ class Tile:
                 '\033[95m',  # 4 pink/purple
                 '\033[96m',  # 5+ light blue
             ]
-            color = colors[min(self.num_adjacent_mimes, 5)]
+            color = colors[min(self.num_adjacent_mines, 5)]
             return f'{color}{self.num_adjacent_mines}{ENDC}'
     
     def __hash__(self):

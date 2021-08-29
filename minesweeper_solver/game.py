@@ -1,5 +1,4 @@
 from game_board import GameBoard
-import pprint
 
 class Game:
     def __init__(self, width, height, num_mines):
@@ -42,14 +41,15 @@ class Game:
                 else:
                     j = -1
             
+            if not self.board._is_inbounds(i, j):
+                print('try again, coordinates out of bounds')
+            
             tile = self.board.board[i][j]
 
             if tile.is_selected():
                 print("try again, this tile is already selected")
             elif tile.is_flagged() and f_or_s == 's':
                 print('try again, this tile is already flagged')
-            elif not self.board._is_inbounds(i, j):
-                print('try again, coordinates out of bounds')
             elif f_or_s == 's':
                 self.board.select(tile)
             elif f_or_s == 'f':
@@ -93,10 +93,10 @@ class Game:
         rows = []
 
         for row in self.board.board:
-            row = ""
+            row_str = ""
             for tile in row:
-                row += self.tile_representation(tile)
-            rows.append(row)
+                row_str += self.tile_representation(tile)
+            rows.append(row_str)
         
         for row in rows:
             print(row)
@@ -123,12 +123,7 @@ def debug(game):
 if __name__ == '__main__':
     game = Game(4, 4, 5)
     # debug(game)
-    # game_tile = game.board.board[1][1]
-    # game.board.add_mines(game_tile)
-    debug(game)
-
-    # print(game.board)
-    # game.play_game()
+    game.play_game()
 
 
 

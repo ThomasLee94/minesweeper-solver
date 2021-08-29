@@ -127,8 +127,6 @@ def test_generate_board_select():
 def test_solver_init():
     solver = MineSweeperSolver(4, 4, 5)
 
-    print(solver.game.board.board)
-
     assert len(solver.game.board.board) == 4
     assert len(solver.game.board.board[0]) == 4
     assert solver.game.width == 4

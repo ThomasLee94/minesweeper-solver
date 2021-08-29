@@ -13,52 +13,51 @@ class MineSweeperSolver:
     def __init__(self, width, height, num_mines):
         self.game = Game(width, height, num_mines) 
     
-    def get_visible_numbers(self):
+    def get_selected_tiles(self):
         """
-        Returns a list of all visible
-        numbers that are selected.
+        Returns a list of all selected tiles
         """
         visible_nums = []
 
         for row in self.game.board.board:
             for tile in row:
-                if self.game.is_selected(tile):
-                    visible_nums.append(tile.num_adjacent_mins)
+                if tile.is_selected():
+                    visible_nums.append(tile)
         
         return visible_nums
     
-    def get_adjacent_flags(self, i, j):
+    def get_adjacent_flags(self, tile):
         """
         Returns a list of all adjacents that are
         flags from i & j.
         """
         flags = []
 
-        for ni, nj in self.game.board.get_neighbours(i, j):
-            if self.game.is_flagged(self.game.board.board[ni][nj]):
-                flags.append((ni, nj))
+        for neighbour_tile in self.game.board.get_neighbours(tile):
+            if neighbour_tile.is_flagged():
+                flags.append(neighbour_tile)
         
         return flags
     
-    def get_hidden_neighbours(self, i, j):
+    def get_hidden_neighbours(self, tile):
         """
         Returns a list of all neighbours that are hidden
         from coord i & j.
         """
         hidden_neighbours = []
 
-        for ni, nj in self.game.board.get_neighbours(i, j):
-            if not self.game.is_selected(self.game.board.board[ni][nj]):
-                hidden_neighbours.append((ni, nj))
+        for neighbour_tile in self.game.board.get_neighbours(tile):
+            if not neighbour_tile.is_selected():
+                hidden_neighbours.append(neighbour_tile)
         
         return hidden_neighbours
 
-    def is_satisfied(self, i, j):
+    def is_satisfied(self, tile):
         """
         If the number of flags next to a numbered tile is equal to the tiles number
         """
-        flags = self.get_adjacent_flags(i, j)
-        return len(flags) == self.game.board.board[i][j].num_adjacent_mines
+        flags = self.get_adjacent_flags(tile)
+        return len(flags) == tile.num_adjacent_mines
     
     def make_random_selection(self):
         """
@@ -68,10 +67,10 @@ class MineSweeperSolver:
         i = random.randint(0, self.game.height - 1)
         j = random.randint(0, self.game.width - 1)
 
-        if self.game.board is None:
-            self.game.select(i,j)
-        elif not self.game.is_selected(self.game.board.board[i][j]):
-            self.game.select(i, j)
+        tile = self.game.board.board[i][j]
+
+        if not tile.is_selected():
+            self.game.board.select(tile)
         else:
             self.make_random_selection()
 
@@ -80,27 +79,27 @@ class MineSweeperSolver:
         Find all selections with 100% certainty.
         """
 
-        for i, j in self.get_visible_numbers():
-            if self.is_satisfied(i,j):
-                neighbours = self.game.board.get_neighbours(i, j)
-                for ni, nj in neighbours:
-                    if (not self.game.is_selected(self.game.board.board[ni][nj]) and not self.game.is_flagged(self.game.board.board[ni][nj])):
-                        yield ni, nj
+        for tile in self.get_selected_tiles():
+            if self.is_satisfied(tile):
+                neighbours = self.game.board.get_neighbours(tile)
+                for neighbour in neighbours:
+                    if (not neighbour.is_selected() and not neighbour.is_flagged()):
+                        yield neighbour
     
     def identify_flags(self):
         """
         Finds all flags with 100% certainty.
         """
 
-        for i, j in self.get_visible_numbers():
-            hidden_neighbours = self.get_hidden_neighbours(i,j)
-            if self.hidden_neighbours_are_mines(i, j, hidden_neighbours):
-                for ni, nj in hidden_neighbours:
-                    if not self.game.is_flagged(ni, nj):
-                        yield ni, nj
+        for tile in self.get_selected_tiles():
+            hidden_neighbours = self.get_hidden_neighbours(tile)
+            if self.hidden_neighbours_are_mines(tile, hidden_neighbours):
+                for neighbour in hidden_neighbours:
+                    if not neighbour.is_flagged():
+                        yield neighbour
     
-    def hidden_neighbours_are_mines(self, i, j, hidden_neighbours):
-        return len(hidden_neighbours) == self.game.hidden_board.board[i][j]
+    def hidden_neighbours_are_mines(self, tile, hidden_neighbours):
+        return tile.num_adjacent_mines == len(hidden_neighbours) 
 
     def solve(self):
         """
@@ -109,18 +108,18 @@ class MineSweeperSolver:
         self.make_random_selection()
         self.game.display_board()
 
-        while not self.game.game_lost() and not self.game.game_won():
+        while not self.game.board.game_lost() and not self.game.board.game_won():
             change_made = False
 
-            for i, j in self.identify_flags():
+            for tile in self.identify_flags():
                 change_made =  True
-                self.game.flag(i, j)
+                self.game.board.flag(tile)
             print('Flaggings')
             self.game.display_board()
 
-            for i, j in self.identify_selections():
+            for tile in self.identify_selections():
                 change_made = True
-                self.game.select(i, j)
+                self.game.board.select(tile)
             print('Selections')
             self.game.display_board()
 
@@ -129,7 +128,7 @@ class MineSweeperSolver:
                 print('----- Random selection -----')
                 self.game.display_board()
         
-        if self.game.game_won():
+        if self.game.board.game_won():
             print("You won!")
         else:
             print("You Lost")
