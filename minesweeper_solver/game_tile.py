@@ -10,7 +10,7 @@ class GameTile(Tile):
         self._is_flagged = False
     
     def __repr__(self):
-        return f'GameTile(is_mine={self.is_mine()})'
+        return f'GameTile(coords={self.i, self.j}, selected={self._is_selected}, mine={self.is_mine()})'
 
     def is_flagged(self):
         return self._is_flagged

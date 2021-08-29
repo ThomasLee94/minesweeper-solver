@@ -11,24 +11,14 @@ class Game:
         
     def __str__(self):
         return f'{str(self.__class__)}'
-        
-    def display_number_tile(self, tile):
-        return tile.num_adjacent_mines
 
     def play_game(self):
         """
         Starts the game and asks for user input for terminal game. 
         Runs the rest of the game turn based logic.
         """
-        print("hello")
-        print("game over: ", self.board.game_over())
-        print("game won: ", self.board.game_won())
-        print("game lost: ", self.board.game_lost())
-
-        pprint.pprint(self.board.board)
 
         while not self.board.game_over():
-            print("input")
             # ask user if they want to place flag or select tile
             f_or_s = None
             while f_or_s != 'f' and f_or_s != 's':
@@ -54,21 +44,14 @@ class Game:
             
             tile = self.board.board[i][j]
 
-            if self.board._is_inbounds(i, j):
-                self.board.select(tile)
-            
-            # select or flag given coords. if the given coords selected, ask again
             if tile.is_selected():
                 print("try again, this tile is already selected")
-            # if the given coords are flagged and the user selected to select, ask again
             elif tile.is_flagged() and f_or_s == 's':
-                print('try again, this tile is already flaggeds')
+                print('try again, this tile is already flagged')
             elif not self.board._is_inbounds(i, j):
                 print('try again, coordinates out of bounds')
-            # if the user asked to select, select the coords given. 
             elif f_or_s == 's':
                 self.board.select(tile)
-            # if user asked to flag, flag or deflag the given coords. 
             elif f_or_s == 'f':
                 self.board.flag(tile)
             
@@ -80,23 +63,6 @@ class Game:
             print("You won")
     
     ########################### VISUALISE BOARD ###########################
-    def display_number_tile(self, tile):
-        """
-        Display terminal board function
-        """
-        num = tile.num_adjacent_mines
-        ENDC = '\033[0m'
-
-        colors = [None,
-                  '\033[92m',  # 1 green
-                  '\033[96m',  # 2 light blue
-                  '\033[91m',  # 3 red
-                  '\033[95m',  # 4 pink/purple
-                  '\033[94m',  # 5 yellow
-                  ]
-        color = colors[min(num, 5)]
-        return f'{color}{num}{ENDC}'
-    
     def tile_representation(self, tile):
         """
         Display terminal board function
@@ -118,20 +84,17 @@ class Game:
             return '\033[91m*\033[0m'
         else:
             # the number on the visible tile
-            return self.display_number_tile(tile)
+            return str(tile)
     
     def display_board(self):
         """
         Display terminal board function
         """
         rows = []
-        # place indicies/rows to see easily
-        # rows.append('  ' + ''.join(map(str, range(self.width))))
 
         for row in self.board.board:
             row = ""
             for tile in row:
-                print(self.tile_representation(tile))
                 row += self.tile_representation(tile)
             rows.append(row)
         
@@ -140,31 +103,33 @@ class Game:
         print()
 
 
-def debug(minesweeper):
+def debug(game):
     """
     Useful debug function
     """
-    for r in minesweeper.board.board:
+    for r in game.board.board:
         print(r)
 
     print()
 
-    for r in minesweeper.board.board:
+    for r in game.board.board:
         print(r)
 
     print()
 
-    minesweeper.display_board()
+    game.display_board()
 
 
 if __name__ == '__main__':
     game = Game(4, 4, 5)
-    clicked_tile = game.board.board[1][1]
-    game.board.select(clicked_tile)
-    
-    game.play_game()
+    # debug(game)
+    # game_tile = game.board.board[1][1]
+    # game.board.add_mines(game_tile)
+    debug(game)
 
-    # print(m)
+    # print(game.board)
+    # game.play_game()
+
 
 
 

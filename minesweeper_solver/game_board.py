@@ -42,8 +42,11 @@ class GameBoard(Board):
         Flags/deflags at the given coordinate
         """
         # deflag
-        if self.is_flagged(game_tile):
-            game_tile.flagged = False
+        if game_tile.is_flagged():
+            game_tile._is_flagged = False
+        # flag
+        else:
+            game_tile._is_flagged = True
 
         # elif not self.is_selected(game_tile):
         #     game_tile.selected = True
@@ -52,13 +55,7 @@ class GameBoard(Board):
         return self.game_won() is True or self.game_lost() is True
 
     def game_won(self):
-        print(self.width, self.height, self.num_mines, self.total_selections)
         return self.width * self.height - self.num_mines == self.total_selections
     
     def game_lost(self):
         return self.mine_selected
-
-if __name__ == "__main__":
-    board = GameBoard(5, 5, 5)
-
-    print(board.board)

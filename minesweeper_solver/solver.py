@@ -126,7 +126,7 @@ class MineSweeperSolver:
 
             if not change_made:
                 self.make_random_selection()
-                print('Random selection !!!!')
+                print('----- Random selection -----')
                 self.game.display_board()
         
         if self.game.game_won():
