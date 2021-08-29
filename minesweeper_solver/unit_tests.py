@@ -133,10 +133,3 @@ def test_solver_init():
     assert solver.game.height == 4
     assert solver.game.num_mines == 5
 
-# def test_solver_get_vis_nums():
-#     solver = MineSweeperSolver(4, 4, 5)
-#     clicked_tile = solver.board.board[1][1]
-#     solver.game.board.select(clicked_tile)
-
-#     assert solver.get_visible_numbers() == 5
-

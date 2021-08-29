@@ -48,9 +48,6 @@ class GameBoard(Board):
         else:
             game_tile._is_flagged = True
 
-        # elif not self.is_selected(game_tile):
-        #     game_tile.selected = True
-
     def game_over(self):
         return self.game_won() is True or self.game_lost() is True
 
