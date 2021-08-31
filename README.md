@@ -18,3 +18,5 @@ minesweeper_solver
 ```
 # Weighted probability
 [link!](https://math.stackexchange.com/questions/2511421/correct-probability-calculation-for-minesweeper)
+
+`pyreverse -o png -p game.py .`
