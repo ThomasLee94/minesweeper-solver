@@ -1,13 +1,14 @@
 from game_board import GameBoard
 
+
 class Game:
     def __init__(self, width, height, num_mines):
         self.board = GameBoard(width, height, num_mines)
-        
+
         self.width = width
         self.height = height
         self.num_mines = num_mines
-        
+
     def __str__(self):
         return f'{str(self.__class__)}'
 
@@ -40,10 +41,10 @@ class Game:
                     j = int(j)
                 else:
                     j = -1
-            
+
             if not self.board._is_inbounds(i, j):
                 print('try again, coordinates out of bounds')
-            
+
             tile = self.board.board[i][j]
 
             if tile.is_selected():
@@ -54,15 +55,15 @@ class Game:
                 self.board.select(tile)
             elif f_or_s == 'f':
                 self.board.flag(tile)
-            
+
             self.display_board()
-        
+
         if self.board.game_lost():
             print("You lost")
         else:
             print("You won")
-    
-    ########################### VISUALISE BOARD ###########################
+
+    # ----- VISUALISE BOARD ----- #
     def tile_representation(self, tile):
         """
         Display terminal board function
@@ -85,7 +86,7 @@ class Game:
         else:
             # the number on the visible tile
             return str(tile)
-    
+
     def display_board(self):
         """
         Display terminal board function
@@ -97,7 +98,7 @@ class Game:
             for tile in row:
                 row_str += self.tile_representation(tile)
             rows.append(row_str)
-        
+
         for row in rows:
             print(row)
         print()
@@ -124,13 +125,3 @@ if __name__ == '__main__':
     game = Game(4, 4, 5)
     # debug(game)
     game.play_game()
-
-
-
-
-
-
-        
-
-    
-

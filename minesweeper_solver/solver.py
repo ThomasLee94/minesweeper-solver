@@ -1,18 +1,11 @@
-# Solver 
-# write an algo that picks a 100% safe box with given info, and store mines that 
-# adding more bombs & grids makes it more difficult
-
-# avoid bombs in the coordinate that the user chooses
-
-# search for all zeros that are connected to ititial 0 (bfs or dfs)
- 
 from game import Game
 import random
+
 
 class MineSweeperSolver:
     def __init__(self, width, height, num_mines):
         self.game = Game(width, height, num_mines) 
-    
+
     def get_selected_tiles(self):
         """
         Returns a list of all selected tiles
@@ -23,9 +16,9 @@ class MineSweeperSolver:
             for tile in row:
                 if tile.is_selected():
                     visible_nums.append(tile)
-        
+
         return visible_nums
-    
+
     def get_adjacent_flags(self, tile):
         """
         Returns a list of all adjacents that are
@@ -36,9 +29,9 @@ class MineSweeperSolver:
         for neighbour_tile in self.game.board.get_neighbours(tile):
             if neighbour_tile.is_flagged():
                 flags.append(neighbour_tile)
-        
+
         return flags
-    
+
     def get_hidden_neighbours(self, tile):
         """
         Returns a list of all neighbours that are hidden
@@ -49,16 +42,17 @@ class MineSweeperSolver:
         for neighbour_tile in self.game.board.get_neighbours(tile):
             if not neighbour_tile.is_selected():
                 hidden_neighbours.append(neighbour_tile)
-        
+
         return hidden_neighbours
 
     def is_satisfied(self, tile):
         """
-        If the number of flags next to a numbered tile is equal to the tiles number
+        If the number of flags next to a numbered tile is
+        equal to the tiles number
         """
         flags = self.get_adjacent_flags(tile)
         return len(flags) == tile.num_adjacent_mines
-    
+
     def make_random_selection(self):
         """
         Select a random tile that has not yet been selected or flagged.
@@ -85,7 +79,7 @@ class MineSweeperSolver:
                 for neighbour in neighbours:
                     if (not neighbour.is_selected() and not neighbour.is_flagged()):
                         yield neighbour
-    
+
     def identify_flags(self):
         """
         Finds all flags with 100% certainty.
@@ -97,7 +91,7 @@ class MineSweeperSolver:
                 for neighbour in hidden_neighbours:
                     if not neighbour.is_flagged():
                         yield neighbour
-    
+
     def hidden_neighbours_are_mines(self, tile, hidden_neighbours):
         return tile.num_adjacent_mines == len(hidden_neighbours) 
 
@@ -112,7 +106,7 @@ class MineSweeperSolver:
             change_made = False
 
             for tile in self.identify_flags():
-                change_made =  True
+                change_made = True
                 self.game.board.flag(tile)
             print('Flaggings')
             self.game.display_board()
@@ -127,11 +121,12 @@ class MineSweeperSolver:
                 self.make_random_selection()
                 print('----- Random selection -----')
                 self.game.display_board()
-        
+
         if self.game.board.game_won():
             print("You won!")
         else:
             print("You Lost")
+
 
 if __name__ == "__main__":
     game = MineSweeperSolver(10, 10, 10)
